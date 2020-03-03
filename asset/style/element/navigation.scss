@@ -1,0 +1,12 @@
+nav#main_navigation {
+  .navbar-brand {
+    height: 5rem;
+    width: 5rem;
+    background-image: url("/asset/image/made-logo.svg");
+    fill: white;
+    background-size: cover;
+  }
+  .collapse {
+    align-self: flex-start;
+  }
+}
