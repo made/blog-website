@@ -14,3 +14,10 @@
 .phpunit.result.cache
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
+
+# Node Dependencies
+node_modules/
+
+# Public asset compilation path
+public/asset
+!public/asset/.gitignore

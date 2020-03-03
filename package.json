@@ -1,0 +1,41 @@
+{
+  "name": "blog-website",
+  "version": "1.0.0",
+  "description": "",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@lab.made.dev:made-blog/blog-website.git"
+  },
+  "author": "Made",
+  "license": "ISC",
+  "homepage": "https://made-the.blog",
+  "dependencies": {
+    "bootstrap": "^4.4.1",
+    "jquery": "^3.4.1",
+    "lazysizes": "^5.2.0",
+    "popper.js": "^1.16.1",
+    "small-module-js": "^1.0.1"
+  },
+  "devDependencies": {
+    "autoprefixer": "^9.7.4",
+    "cssnano": "^4.1.10",
+    "del": "^5.1.0",
+    "gulp": "^4.0.2",
+    "gulp-concat": "^2.6.1",
+    "gulp-imagemin": "^7.1.0",
+    "gulp-minify": "^3.1.0",
+    "gulp-postcss": "^8.0.0",
+    "gulp-rename": "^2.0.0",
+    "gulp-responsive": "^3.0.1",
+    "gulp-sass": "^4.0.2",
+    "gulp-sourcemaps": "^2.6.5",
+    "minimist": "^1.2.0",
+    "node-sass": "^4.13.1"
+  }
+}
