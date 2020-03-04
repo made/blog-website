@@ -1,5 +1,14 @@
 @import "node_modules/bootstrap/scss/bootstrap";
 
+// Font awesome
+// ToDo: Later only import icons which are really needed :)
+$fa-font-path: '~/asset/font';
+@import "node_modules/@fortawesome/fontawesome-free/scss/fontawesome";
+@import "node_modules/@fortawesome/fontawesome-free/scss/regular";
+@import "node_modules/@fortawesome/fontawesome-free/scss/solid";
+@import "node_modules/@fortawesome/fontawesome-free/scss/brands";
+
+
 @import "variables";
 @import "global";
 @import "_buttons";

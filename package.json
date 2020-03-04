@@ -16,6 +16,7 @@
   "license": "ISC",
   "homepage": "https://made-the.blog",
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.12.1",
     "bootstrap": "^4.4.1",
     "jquery": "^3.4.1",
     "lazysizes": "^5.2.0",

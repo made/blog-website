@@ -115,9 +115,12 @@ const path = {
         del: './public/asset/script/**',
     },
     font: {
+        add: [
+            './node_modules/@fortawesome/fontawesome-free/webfonts/'
+        ],
         src: './asset/fonts/**/*',
-        dest: './public/asset/fonts/',
-        del: './public/asset/fonts/**',
+        dest: './public/asset/font/',
+        del: './public/asset/font/**',
     },
     image: {
         src: './asset/image/**/*.{png,jpg,jpeg,gif,svg}',
@@ -366,7 +369,12 @@ function cleanFontTask() {
 function compileFontTask() {
     return (
         gulp
-            .src(path.font.src)
+            .src(function () {
+                let src = path.font.add;
+                src.push(path.font.src);
+
+                return src;
+            }())
             .pipe(
                 gulp.dest(path.font.dest)
             )
@@ -506,7 +514,7 @@ function cleanDefaultTask() {
             .parallel([
                 cleanStyleTask,
                 cleanScriptTask,
-                cleanFontTask,
+                // cleanFontTask,// ToDo: Enable as soon as it works.
                 cleanImageTask,
             ])
     );
@@ -518,7 +526,7 @@ function compileDefaultTask() {
             .parallel([
                 compileStyleTask,
                 compileScriptTask,
-                compileFontTask,
+                // compileFontTask,// ToDo: Enable as soon as it works.
                 compileImageTask,
             ])
     );
@@ -540,7 +548,7 @@ function watchDefaultTask() {
             .parallel([
                 watchStyleTask(),
                 watchScriptTask(),
-                watchFontTask(),
+                // watchFontTask(), // ToDo: Enable as soon as it works.
                 watchImageTask(),
             ])
     );
@@ -563,7 +571,7 @@ gulp.task('script:clean', cleanScriptTask);
 gulp.task('script:compile', compileScriptTask);
 gulp.task('script:watch', watchScriptTask());
 
-// ToDo: Fix font compiler -> it is not copying at the moment
+// ToDo: Fix font compiler -> it is not compiling at the moment
 gulp.task('font', cleanCompileFontTask);
 gulp.task('font:clean', cleanFontTask);
 gulp.task('font:compile', compileFontTask);
