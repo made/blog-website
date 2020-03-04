@@ -1,0 +1,16 @@
+@import "variables";
+
+.btn, button {
+  border-radius: 3px;
+  font-weight: bold;
+}
+
+.btn-primary {
+  background-color: $primary;
+  border-color: darken($primary, 5%);
+
+  &:hover, &:focus, &:active {
+    background-color: darken($primary, 5%);
+    border-color: darken($primary, 10%);
+  }
+}

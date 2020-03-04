@@ -114,6 +114,11 @@ const path = {
         // Delete this when cleaning up.
         del: './public/asset/script/**',
     },
+    font: {
+        src: './asset/fonts/**/*',
+        dest: './public/asset/fonts/',
+        del: './public/asset/fonts/**',
+    },
     image: {
         src: './asset/image/**/*.{png,jpg,jpeg,gif,svg}',
         dest: './public/asset/image',
@@ -352,6 +357,51 @@ function watchScriptTask() {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+function cleanFontTask() {
+    return (
+        del(path.font.del)
+    );
+}
+
+function compileFontTask() {
+    return (
+        gulp
+            .src(path.font.src)
+            .pipe(
+                gulp.dest(path.font.dest)
+            )
+    );
+}
+
+function cleanCompileFontTask() {
+    return (
+        gulp
+            .series([
+                cleanFontTask,
+                compileFontTask,
+            ])
+    );
+}
+
+function watchFontTask() {
+    function watchFontTask() {
+        return (
+            gulp
+                .watch(path.font.src, compileFontTask())
+        );
+    }
+
+    return (
+        gulp
+            .series([
+                compileFontTask,
+                watchFontTask,
+            ])
+    );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 function cleanImageTask() {
     return (
         del(path.image.del)
@@ -456,6 +506,7 @@ function cleanDefaultTask() {
             .parallel([
                 cleanStyleTask,
                 cleanScriptTask,
+                cleanFontTask,
                 cleanImageTask,
             ])
     );
@@ -467,6 +518,7 @@ function compileDefaultTask() {
             .parallel([
                 compileStyleTask,
                 compileScriptTask,
+                compileFontTask,
                 compileImageTask,
             ])
     );
@@ -488,6 +540,7 @@ function watchDefaultTask() {
             .parallel([
                 watchStyleTask(),
                 watchScriptTask(),
+                watchFontTask(),
                 watchImageTask(),
             ])
     );
@@ -509,6 +562,12 @@ gulp.task('script', cleanCompileScriptTask());
 gulp.task('script:clean', cleanScriptTask);
 gulp.task('script:compile', compileScriptTask);
 gulp.task('script:watch', watchScriptTask());
+
+// ToDo: Fix font compiler -> it is not copying at the moment
+gulp.task('font', cleanCompileFontTask);
+gulp.task('font:clean', cleanFontTask);
+gulp.task('font:compile', compileFontTask);
+gulp.task('font:watch', watchFontTask);
 
 gulp.task('image', cleanCompileImageTask());
 gulp.task('image:clean', cleanImageTask);

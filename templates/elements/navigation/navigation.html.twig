@@ -1,7 +1,7 @@
-<nav class="mb-1 navbar fixed-top navbar-expand-lg navbar-dark info-color" id="main_navigation">
-    <div class="nav-visible-container">
-        <a class="navbar-brand" href="/{{ locale }}" title="{% trans from 'navigation' %}Homepage{% endtrans %}">
-{#            <img class="navbar-brand" src="{{ asset('/asset/image/made-logo.svg') }}" alt="Made Logo">#}
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark" id="main_navigation">
+    <div class="navbar-brand">
+        <a href="/{{ locale }}" title="{% trans from 'navigation' %}Homepage{% endtrans %}">
+            <img class="navbar-brand" src="{{ asset('/asset/image/made-logo.svg') }}" alt="Made Logo">
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNavigation"
                 aria-controls="mainNavigation" aria-expanded="false" aria-label="Toggle navigation">
@@ -9,36 +9,37 @@
         </button>
     </div>
     <div class="collapse navbar-collapse" id="mainNavigation">
-        <ul class="navbar-nav ml-auto">
+        <ul class="nav navbar-nav navbar-center">
             <li class="nav-item">
-                <a class="nav-link" href="#services" title="{% trans from 'navigation' %}Services{% endtrans %}">
+                <a class="nav-link" href="#home" title="{% trans from 'navigation' %}Home{% endtrans %}">
                     {% trans from 'navigation' %}Home{% endtrans %}
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#about_me" title="{% trans from 'navigation' %}About Me{% endtrans %}">
+                <a class="nav-link" href="#key_facts" title="{% trans from 'navigation' %}Key Facts{% endtrans %}">
                     {% trans from 'navigation' %}Key Facts{% endtrans %}
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#technologies" title="{% trans from 'navigation' %}Technologies{% endtrans %}">
+                <a class="nav-link" href="#benefits" title="{% trans from 'navigation' %}Benefits{% endtrans %}">
                     {% trans from 'navigation' %}Benefits{% endtrans %}
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#customers_and_partners" title="{% trans from 'navigation' %}Customers & Partners{% endtrans %}">
+                <a class="nav-link" href="#roadmap" title="{% trans from 'navigation' %}Roadmap{% endtrans %}">
                     {% trans from 'navigation' %}Roadmap{% endtrans %}
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#contact" title="{% trans from 'navigation' %}Contact{% endtrans %}">
-                    {% trans from 'navigation' %}Pricing{% endtrans %}
-                </a>
-            </li>
+{#            <li class="nav-item">#}
+{#                <a class="nav-link" href="#pricing" title="{% trans from 'navigation' %}Pricing{% endtrans %}">#}
+{#                    {% trans from 'navigation' %}Pricing{% endtrans %}#}
+{#                </a>#}
+{#            </li>#}
             <li>
-                <a class="nav-link" href="#contact" title="{% trans from 'navigation' %}Contact{% endtrans %}">
+                <a class="nav-link" href="#settings" title="{% trans from 'navigation' %}Settings{% endtrans %}">
                     {% trans from 'navigation' %}Settings{% endtrans %}
-                </a> {# ToDo: Settings - language Switcher, Dark Mode, Cookie Settings, etc #}
+                    {# ToDo: Settings - language Switcher, Dark Mode, Cookie Settings, etc #}
+                </a>
             </li>
         </ul>
     </div>

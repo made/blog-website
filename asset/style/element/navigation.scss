@@ -1,11 +1,19 @@
 nav#main_navigation {
+  padding: 30px;
+  height: 4rem;
+
   .navbar-brand {
+    margin-top: 5px;
     height: 5rem;
     width: 5rem;
-    background-image: url("/asset/image/made-logo.svg");
-    fill: white;
-    background-size: cover;
   }
+
+  .navbar-nav.navbar-center {
+    position: absolute;
+    left: 50%;
+    transform: translatex(-50%);
+  }
+
   .collapse {
     align-self: flex-start;
   }
