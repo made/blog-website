@@ -116,9 +116,9 @@ const path = {
     },
     font: {
         add: [
-            './node_modules/@fortawesome/fontawesome-free/webfonts/'
+            './node_modules/@fortawesome/fontawesome-free/webfonts/*'
         ],
-        src: './asset/fonts/**/*',
+        src: './asset/font/**/*',
         dest: './public/asset/font/',
         del: './public/asset/font/**',
     },
@@ -514,7 +514,7 @@ function cleanDefaultTask() {
             .parallel([
                 cleanStyleTask,
                 cleanScriptTask,
-                // cleanFontTask,// ToDo: Enable as soon as it works.
+                cleanFontTask,
                 cleanImageTask,
             ])
     );
@@ -526,7 +526,7 @@ function compileDefaultTask() {
             .parallel([
                 compileStyleTask,
                 compileScriptTask,
-                // compileFontTask,// ToDo: Enable as soon as it works.
+                compileFontTask,
                 compileImageTask,
             ])
     );
@@ -548,7 +548,7 @@ function watchDefaultTask() {
             .parallel([
                 watchStyleTask(),
                 watchScriptTask(),
-                // watchFontTask(), // ToDo: Enable as soon as it works.
+                watchFontTask(),
                 watchImageTask(),
             ])
     );
@@ -571,7 +571,6 @@ gulp.task('script:clean', cleanScriptTask);
 gulp.task('script:compile', compileScriptTask);
 gulp.task('script:watch', watchScriptTask());
 
-// ToDo: Fix font compiler -> it is not compiling at the moment
 gulp.task('font', cleanCompileFontTask);
 gulp.task('font:clean', cleanFontTask);
 gulp.task('font:compile', compileFontTask);
