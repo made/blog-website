@@ -13,10 +13,10 @@ $fa-font-path: '~/asset/font';
 @import "global";
 @import "_buttons";
 @import "_banner";
+@import "_text";
 
 @import "asset/style/element/navigation";
 @import "asset/style/element/cli";
 
-@import "asset/style/stage/landing";
-@import "asset/style/stage/cli-banner";
+@import "page/homepage";
 

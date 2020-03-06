@@ -1,0 +1,17 @@
+@import "variables";
+
+@mixin underline($color: #000) {
+  padding-bottom: 15px;
+  display: inline-block;
+  margin-bottom: 15px;
+  border-bottom: 4px solid $color;
+}
+
+.text-underline-primary {
+  @include underline($primary)
+}
+
+.text-underline-secondary {
+  @include underline($secondary)
+}
+
