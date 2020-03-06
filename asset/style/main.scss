@@ -10,6 +10,8 @@ $fa-font-path: '~/asset/font';
 @import "node_modules/@fortawesome/fontawesome-free/scss/brands";
 
 @import "functions/functions";
+@import "animations/animations";
+
 @import "global";
 @import "_buttons";
 @import "_banner";

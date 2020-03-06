@@ -41,6 +41,7 @@
 
   i {
     font-size: add($icon-size, 1);
+    animation: floating 3s linear infinite;
   }
 }
 

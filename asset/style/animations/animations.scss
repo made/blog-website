@@ -1,0 +1,17 @@
+@keyframes floating {
+  0% {
+    transform: translate3d(0px, 0px, 0px);
+  }
+  40% {
+    transform: translate3d(0px, 14px, 0px);
+  }
+  50% {
+    transform: translate3d(0px, 15px, 0px);
+  }
+  70% {
+    transform: translate3d(0px, 15px, 0px);
+  }
+  100% {
+    transform: translate3d(0px, 0px, 0px);
+  }
+}
