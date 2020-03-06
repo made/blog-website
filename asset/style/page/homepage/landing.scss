@@ -6,10 +6,12 @@
 
 // ToDo: For now use this as the animation. Later the SVG should be recompiled so that the waves can be transitioned
 //  more slowly/fancy
-.landing.scrolled {
-  background-color: #334155;
-  transition: all 0.6s ease-in-out;
-}
+//.landing.scrolled {
+//  background-color: #334155;
+//  transition: all 0.6s ease-in-out;
+//  box-shadow: 0 1px 5px rgba($dark, 0.2);
+//
+//}
 
 .landing {
   height: 75vh;
