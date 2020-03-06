@@ -1,0 +1,17 @@
+// Basic mathematic functions
+@function add($term1, $term2) {
+  @return $term1 + $term2;
+}
+
+@function subtract($term1, $term2) {
+  @return $term1 - $term2;
+}
+
+@function multiply($multiplier, $multiplicand) {
+  @return $multiplier * $multiplicand;
+}
+
+@function division($dividend, $divisor) {
+  @return $dividend / $divisor;
+}
+

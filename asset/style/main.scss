@@ -8,7 +8,7 @@ $fa-font-path: '~/asset/font';
 @import "node_modules/@fortawesome/fontawesome-free/scss/solid";
 @import "node_modules/@fortawesome/fontawesome-free/scss/brands";
 
-
+@import "functions/functions";
 @import "variables";
 @import "global";
 @import "_buttons";
