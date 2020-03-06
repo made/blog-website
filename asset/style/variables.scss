@@ -2,7 +2,28 @@ $font-family-base: 'Muli', sans-serif;
 $font-family-monospace: 'JetBrains Mono', monospace; // ToDo: Switch this to monospace
 $font-family-sans-serif: 'Muli', sans-serif;
 
-$primary: #F69444;
-$dark-blue: #334155;
+$white: #fff;
+$black: #000;
+
+$dark:    #334155 !default;
+$blue:    #007bff !default;
+$indigo:  #6610f2 !default;
+$purple:  #6f42c1 !default;
+$pink:    #e83e8c !default;
+$red:     #E14F37 !default;
+$orange:  #F69444 !default;
+$yellow:  #ffc107 !default;
+$green:   #28a745 !default;
+$teal:    #35B095 !default;
+$cyan:    #17a2b8 !default;
+
+$primary:       $orange !default;
+$secondary:     $teal !default;
+$success:       $green !default;
+$info:          $cyan !default;
+$warning:       $yellow !default;
+$danger:        $red !default;
+$light:         $white !default;
+$dark:          $dark !default;
 
 $icon-size: 2em;

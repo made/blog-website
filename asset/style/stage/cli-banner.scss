@@ -1,0 +1,10 @@
+.cli-banner {
+  height: 100px;
+}
+
+@media (max-width: 768px) {
+  .cli-banner {
+    padding: 3em 0;
+    height: auto;
+  }
+}

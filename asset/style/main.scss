@@ -1,3 +1,4 @@
+@import "variables";
 @import "node_modules/bootstrap/scss/bootstrap";
 
 // Font awesome
@@ -9,9 +10,13 @@ $fa-font-path: '~/asset/font';
 @import "node_modules/@fortawesome/fontawesome-free/scss/brands";
 
 @import "functions/functions";
-@import "variables";
 @import "global";
 @import "_buttons";
+@import "_banner";
+
 @import "asset/style/element/navigation";
+@import "asset/style/element/cli";
+
 @import "asset/style/stage/landing";
+@import "asset/style/stage/cli-banner";
 
