@@ -6,6 +6,7 @@ $white: #fff;
 $black: #000;
 
 $dark:    #334155 !default;
+$light:   #F9F9F9 !default;
 $blue:    #007bff !default;
 $indigo:  #6610f2 !default;
 $purple:  #6f42c1 !default;
@@ -23,7 +24,7 @@ $success:       $green !default;
 $info:          $cyan !default;
 $warning:       $yellow !default;
 $danger:        $red !default;
-$light:         $white !default;
+$light:         $light !default;
 $dark:          $dark !default;
 
 $icon-size: 2em;
