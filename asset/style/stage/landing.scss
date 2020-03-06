@@ -1,8 +1,18 @@
 @import "../functions/functions";
 @import "../variables";
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Main
+
+// ToDo: For now use this as the animation. Later the SVG should be recompiled so that the waves can be transitioned
+//  more slowly/fancy
+.landing.scrolled {
+  background-color: #334155;
+  transition: all 0.6s ease-in-out;
+}
+
 .landing {
-  height: 80vh;
+  height: 75vh;
   width: 100%;
   background: url('/asset/image/Background.svg') bottom no-repeat;
   background-size: cover;
@@ -13,25 +23,47 @@
 
   .landing-title, .landing-subtitle {
     text-align: center;
-    color:white;
-    text-shadow: 3px 3px 4px rgba(1,1,1,0.1);
+    color: white;
+    text-shadow: 3px 3px 4px rgba(1, 1, 1, 0.1);
   }
 
   .landing-title {
-    font-size: multiply($h1-font-size, 2);
     font-weight: bold;
-  }
-  .landing-subtitle {
-    font-size: $h4-font-size;
   }
 }
 
 .after-landing {
-  height: 20vh;
+  height: 25vh;
   display: flex;
   align-items: center;
+  justify-content: center;
   flex-direction: column;
+
   i {
     font-size: add($icon-size, 1);
+  }
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Media Queries
+
+// Small devices (landscape phones, 576px and up)
+@media (max-width: 576px) {
+  .landing-title {
+    font-size: 2em;
+  }
+  .landing-subtitle {
+    font-size: 1em;
+  }
+}
+
+// Medium devices (tablets, 768px and up)
+@media (min-width: 576px) {
+  .landing-title {
+    font-size: 4em;
+  }
+  .landing-subtitle {
+    font-size: 2em;
   }
 }

@@ -21,6 +21,7 @@ Module('App.Navigation', (function () {
 // ToDo: working - but still neds to be cleaned :)
 $(document).ready(function () {
     $(window).scroll(function () {
-        $("#main_navigation").toggleClass("navbar-shrink", $(this).scrollTop() > 75)
+        $("#main_navigation").toggleClass("navbar-shrink", $(this).scrollTop() > 75);
+        $(".landing").toggleClass("scrolled", $(this).scrollTop() > 75);
     });
 });

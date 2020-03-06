@@ -1,3 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1920" height="699.234" viewBox="0 0 1920 699.234">
-  <path id="Background" d="M1090,753c-433.219,153.526-960,0-960,0V122H2050V753C2047.833,753.5,1523.219,599.474,1090,753Z" transform="translate(-130 -122)" fill="#334155"/>
+    <path id="Background"
+          d="M1090,753c-433.219,153.526-960,0-960,0V122H2050V753C2047.833,753.5,1523.219,599.474,1090,753Z"
+          transform="translate(-130 -122)" fill="#334155"/>
 </svg>
