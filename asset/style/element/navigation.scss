@@ -1,21 +1,38 @@
 @import "../variables";
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Mixins
+
+@mixin made-svg-logo($collapsed: false) {
+  width: 15em;
+  height: 7em;
+
+  @if ($collapsed == true) {
+    width: 6em;
+    height: 3em;
+    transform: translate(0%, 25%); // ToDo: Find a nicer way for this -> display flex and justify center or something for svg
+
+    g {
+      path.D, path.E {
+        transform: translate(45%, -50%);
+      }
+    }
+  }
+
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Main Navigation
+
 nav#main_navigation {
-  &, * {
+
+  * {
     transition: all 0.6s ease-in-out;
   }
 
-  padding: 30px;
-  height: 10rem;
-
   .navbar-brand {
     a svg {
-      width: 14rem;
-      height: 7rem;
-
-      g {
-        fill: white;
-      }
+      @include made-svg-logo();
     }
   }
 
@@ -26,7 +43,8 @@ nav#main_navigation {
   }
 
   .collapse {
-    align-self: flex-start;
+    align-self: center;
+    padding-bottom: 5em;
 
     ul li a {
       color: white;
@@ -35,21 +53,22 @@ nav#main_navigation {
 
   &.navbar-shrink {
     background-color: $dark-blue;
-    padding: 25px;
-    height: 4rem;
+
+    .collapse {
+      padding: 0;
+    }
 
     a svg {
-      width: 6rem;
-      height: 3rem;
-      transform: translate(0%, 15%); // ToDo: Find a nicer way for this -> display flex and justify center or something for svg
-      g {
-        font-family: $font-family-monospace;
-
-        path.D, path.E {
-          transform: translate(45%, -50%);
-
-        }
-      }
+      @include made-svg-logo(true);
     }
+  }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Media Queries
+
+@media (max-width: 992px) {
+  nav#main_navigation .navbar-brand a svg {
+    @include made-svg-logo(true);
   }
 }

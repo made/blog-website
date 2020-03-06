@@ -11,7 +11,14 @@
   @return $multiplier * $multiplicand;
 }
 
-@function division($dividend, $divisor) {
+@function divide($dividend, $divisor) {
   @return $dividend / $divisor;
 }
 
+@function double($x){
+  @return 2 * $x;
+}
+
+@function tripple($x){
+  @return 3 * $x;
+}
