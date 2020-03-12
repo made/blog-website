@@ -3,7 +3,6 @@
 
 // Font awesome
 // ToDo: Later only import icons which are really needed :)
-$fa-font-path: '/asset/font';
 @import "node_modules/@fortawesome/fontawesome-free/scss/fontawesome";
 @import "node_modules/@fortawesome/fontawesome-free/scss/regular";
 @import "node_modules/@fortawesome/fontawesome-free/scss/solid";
@@ -20,6 +19,7 @@ $fa-font-path: '/asset/font';
 
 @import "asset/style/element/navigation";
 @import "asset/style/element/cli";
+@import "asset/style/element/footer";
 
 @import "page/homepage";
 
