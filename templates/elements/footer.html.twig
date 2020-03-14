@@ -4,10 +4,9 @@
             <div class="row">
                 <div class="col-md-4 pb-3 pb-md-0 text-center text-md-left">
                     <h2>Navigation</h2>
-                    {# ToDo: Use controller routing here for multilanguage support #}
-                    <a href="/">Home</a>
-                    <a href="#">Showcase</a>
-                    <a href="#">Documentation</a>
+                    <a href="#home">Home</a>
+                    <a href="#showcase">Showcase</a> {# ToDo: Showcase Implementation #}
+                    <a href="#documentation">Documentation</a> {# ToDo: Documentation Implementation #}
                 </div>
                 <div class="col-md-4 pb-3 pb-md-0 text-center text-md-left">
                     <h2>Portals</h2>
@@ -15,9 +14,8 @@
                 </div>
                 <div class="col-md-4 pb-3 pb-md-0 text-center text-md-left">
                     <h2>Legal</h2>
-                    {# ToDo: Use controller routing here for multilanguage support #}
-                    <a href="/imprint">Imprint</a>
-                    <a href="/privacy-policy">Privacy Policy</a>
+                    <a href="/{{ locale }}/{% trans from 'route' %}imprint{% endtrans %}">Imprint</a>
+                    <a href="/{{ locale }}/{% trans from 'route' %}privacy_policy{% endtrans %}">Privacy Policy</a>
                 </div>
             </div>
         </div>
@@ -35,6 +33,6 @@
     </div>
     <div class="footer-notice text-center pt-3">
         <p class="m-0">Made with <i class="fas fa-heart"></i> by <a href="https://made.dev" target="_blank">Made</a></p>
-        <p class="m-0">© Copyright 2019-2020 <a href="https://made.dev" target="_blank">Made</a></p>
+        <p class="m-0">© Copyright 2019-{{ "now"|date("Y") }} <a href="https://made.dev" target="_blank">Made</a></p>
     </div>
 </footer>
