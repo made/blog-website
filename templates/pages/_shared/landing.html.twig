@@ -1,0 +1,22 @@
+<section class="landing">
+
+    {% if landing.title is defined %}
+        <div class="landing-title mb-2">{{ landing.title|raw }}</div>
+    {% endif %}
+
+    {% if landing.subtitle is defined %}
+        <div class="landing-subtitle mb-5">{{ landing.subtitle|raw }}</div>
+    {% endif %}
+
+    {% if landing.button is defined %}
+        <button class="btn btn-primary">{{ landing.button|raw }}</button>
+    {% endif %}
+
+</section>
+
+<section class="after-landing">
+    {% if landing.scroll is defined and landing.scroll == true %}
+        <pre>Don't be shy, continue scrolling :)</pre>
+        <i class="far fa-hand-point-down"></i>
+    {% endif %}
+</section>

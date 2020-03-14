@@ -1,10 +1,13 @@
 {% extends './base.html.twig' %}
 {% block body %}
-    {% include '/pages/_partials/landing.html.twig' %}
-    {% include '/pages/_partials/cli.html.twig' %}
-    {% include '/pages/_partials/about.html.twig' %}
-    {% include '/pages/_partials/key-facts.html.twig' %}
-    {% include '/pages/_partials/benefits.html.twig' %}
-    {% include '/pages/_partials/newsletter.html.twig' %}
+
+    {% set landing = {'title': 'Made Blog<br/>Framework', 'subtitle': 'For intuitive easy convenient blogging', 'button': 'Inspire yourself', 'scroll': true} %}
+
+    {% include '/pages/_shared/landing.html.twig' %}
+    {% include '/pages/_homepage/cli.html.twig' %}
+    {% include '/pages/_homepage/about.html.twig' %}
+    {% include '/pages/_homepage/key-facts.html.twig' %}
+    {% include '/pages/_homepage/benefits.html.twig' %}
+    {% include '/pages/_homepage/newsletter.html.twig' %}
 
 {% endblock %}
