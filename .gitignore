@@ -21,3 +21,5 @@ node_modules/
 # Public asset compilation path
 public/asset
 !public/asset/.gitignore
+
+.idea/
