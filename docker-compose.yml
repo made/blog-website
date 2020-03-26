@@ -1,0 +1,25 @@
+---
+version: '3'
+
+services:
+  web:
+#    image: registry.made.dev/docker/alpine-nginx-php7:dev-96314c6e # change this to the image of the actual project
+    image: foo # change this to the image of the actual project
+    restart: always
+    volumes:
+      - ./:/var/www/html/
+    ports:
+      - ${EXPOSED_PORT-80}:8000
+    environment:
+      - APP_ENV=${APP_ENV-dev}
+      - ALLOW_OVERRIDE=${ALLOW_OVERRIDE-YES}
+      - PROJECT_ROOT=${PROJECT_ROOT-/var/www/html/}
+      - DOCUMENT_ROOT=${DOCUMENT_ROOT-/var/www/html/}
+      - PHP_MEMORY_LIMIT=${PHP_MEMORY_LIMIT-512M}
+      - MAILER_URL=${MAILER_URL-none}
+
+#  mailhog:
+#    image: mailhog/mailhog
+#    ports:
+#      - 1025:1025
+#      - 8025:8025

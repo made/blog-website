@@ -1,0 +1,1 @@
+FROM registry.made.dev/docker/alpine-nginx-php7:0.1
