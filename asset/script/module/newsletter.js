@@ -17,6 +17,11 @@
  */
 
 Module('App.Newsletter', (function () {
+
+    /**
+     * Handling the submission of newsletter email - Step 1 of the multi level form.
+     * @param event
+     */
     function handleFormSubmitEmail(event) {
         event.preventDefault();
         let formEmail = document.getElementById('newsletter_form_email');
@@ -37,6 +42,10 @@ Module('App.Newsletter', (function () {
         }
     }
 
+    /**
+     * Handling the submission of newsletter email - Step 2 of the multi level form.
+     * @param event
+     */
     function handleFormSubmitToken(event) {
         event.preventDefault();
         let formToken = document.getElementById('newsletter_form_token');
@@ -64,13 +73,17 @@ Module('App.Newsletter', (function () {
      * @param url the url to post to
      * @param formElement HTML element which contains the complete form.
      * @param __callback Callback Function to call after the response is here
+     *
+     * @link https://codepen.io/mrrocks/pen/EiplA Loader is from here.
+     * @link https://stackoverflow.com/questions/3038901/how-to-get-the-response-of-xmlhttprequest
+     * @link https://stackoverflow.com/a/42344858 Without this Symfony would not recognize this as an ajax request
+     * @link https://developer.mozilla.org/en-US/docs/Web/API/FormData/Using_FormData_Objects
      */
     function sendPostRequest(url, formElement, __callback) {
 
         let request = new XMLHttpRequest();
         request.onreadystatechange = function () {
             if (XMLHttpRequest.DONE === request.readyState) {
-                console.log(request.responseText); // ToDo: Debug only - remove this later.
                 __callback(formElement, request.responseText);
             }
         };
@@ -106,4 +119,3 @@ Module('App.Newsletter', (function () {
         initialize: initialize,
     }
 }));
-

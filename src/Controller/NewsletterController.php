@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Made Blog
  * Copyright (c) 2019-2020 Made
@@ -53,10 +54,7 @@ class NewsletterController extends AbstractController
             return $this->forward('App\Controller\NewsletterController::registerToken');
         }
 
-        $form = $this->createForm(
-            NewsletterEmailType::class,
-            new NewsletterEmail()
-        );
+        $form = $this->createForm(NewsletterEmailType::class, new NewsletterEmail());
 
         if ($request->isXmlHttpRequest()) {
             $form->handleRequest($request);
@@ -88,6 +86,9 @@ class NewsletterController extends AbstractController
 
     /**
      * @Route(path="/newsletter_register_token", name="newsletter_register_token", methods={"POST"})
+     * @param SessionInterface $session
+     * @param Request $request
+     * @return Response
      */
     public function registerToken(SessionInterface $session, Request $request)
     {
@@ -99,10 +100,8 @@ class NewsletterController extends AbstractController
             return $this->forward('App\Controller\NewsletterController::registerSuccess');
         }
 
-        $form = $this->createForm(
-            NewsletterTokenType::class,
-            new NewsletterToken()
-        );
+        $form = $this->createForm(NewsletterTokenType::class, new NewsletterToken());
+
         if ($request->isXmlHttpRequest()) {
             $form->handleRequest($request);
             if ($form->isSubmitted()) {
