@@ -38,8 +38,9 @@ class NewsletterController extends AbstractController
 {
     // ToDo: Clean this class and maybe also outsource some things.
 
-    public const FORM_SUBMIT_STEP_1_NAME = 'newsletter_step_1_done';
-    public const FORM_SUBMIT_STEP_2_NAME = 'newsletter_step_2_done';
+    private const FORM_EMAIL = 'newsletter_email';
+    private const FORM_SUBMIT_STEP_1_NAME = 'newsletter_step_1_done';
+    private const FORM_SUBMIT_STEP_2_NAME = 'newsletter_step_2_done';
 
     /**
      * @Route(path="/newsletter_register", name="newsletter_register", methods={"POST"})
@@ -58,9 +59,14 @@ class NewsletterController extends AbstractController
 
         if ($request->isXmlHttpRequest()) {
             $form->handleRequest($request);
+
+            /** @var NewsletterEmail $newsletterEmail */
+            $newsletterEmail = $form->getData();
+
             if ($form->isSubmitted()) {
                 if ($form->isValid()) {
                     $session->set(static::FORM_SUBMIT_STEP_1_NAME, true);
+                    $session->set(static::FORM_EMAIL, $newsletterEmail->getEmail());
 
                     // ToDo: handle $form->getData()
                     //  send email and store information in session to verify the token sent.
@@ -69,18 +75,14 @@ class NewsletterController extends AbstractController
 
                     return $this->forward('App\Controller\NewsletterController::registerToken');
                 } else {
-                    return $this->render('newsletter.html.twig', [
-                        'form' => $form->createView(),
-                        'error' => true
-                    ]);
+                    $error = true;
                 }
             }
-
-
         }
 
-        return $this->render('newsletter.html.twig', [
+        return $this->render('elements/newsletter/newsletter_email.html.twig', [
             'form' => $form->createView(),
+            'error' => $error ?? false
         ]);
     }
 
@@ -115,16 +117,15 @@ class NewsletterController extends AbstractController
 
                     return $this->forward('App\Controller\NewsletterController::registerSuccess');
                 } else {
-                    return $this->render('newsletter_token.html.twig', [
-                        'form' => $form->createView(),
-                        'error' => true
-                    ]);
+                    $error = true;
                 }
             }
         }
 
-        return $this->render('newsletter_token.html.twig', [
+        return $this->render('elements/newsletter/newsletter_token.html.twig', [
             'form' => $form->createView(),
+            'error' => $error ?? false,
+            'email' => $session->get(static::FORM_EMAIL) ?? null
         ]);
     }
 
@@ -133,6 +134,6 @@ class NewsletterController extends AbstractController
      */
     public function registerSuccess()
     {
-        return $this->render('newsletter_success.html.twig');
+        return $this->render('elements/newsletter/newsletter_success.html.twig');
     }
 }
