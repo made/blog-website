@@ -24,10 +24,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 
 /**
- * Class NewsletterRegistration
+ * Class NewsletterEmail
  * @package App\Form\Newsletter
  */
-class NewsletterRegistration
+class NewsletterEmail
 {
     /**
      * @Assert\NotBlank()
@@ -45,9 +45,9 @@ class NewsletterRegistration
 
     /**
      * @param string $email
-     * @return NewsletterRegistration
+     * @return NewsletterEmail
      */
-    public function setEmail(string $email): NewsletterRegistration
+    public function setEmail(string $email): NewsletterEmail
     {
         $this->email = $email;
         return $this;

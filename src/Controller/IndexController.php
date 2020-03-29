@@ -70,22 +70,24 @@ class IndexController extends AbstractController
         ]);
     }
 
-
     /**
-     * @Route("/{_locale}", name="home_page", methods={"GET"})
+     * @Route(
+     *     path="/{_locale}",
+     *     defaults={"_locale"="en"},
+     *     name="home_page",
+     *     requirements={"_locale"="de|en"}
+     *     )
      * @param Request $request
-     * @param string $_locale
      * @return Response
      */
-    public function homePageAction(Request $request, string $_locale): Response
+    public function homePageAction(Request $request): Response
     {
-        if (!in_array($_locale, self::ALLOWED_LOCALES)) {
-            return $this->redirect('/en');
-        }
+        $newsletterResponse = $this->forward('App\Controller\NewsletterController::register');
 
         return $this->render('pages/homepage.html.twig', [
             "locale" => $request->getLocale(),
-            "page" => "homepage"
+            "page" => "homepage",
+            "form_newsletter" => $newsletterResponse->getContent() ?? null
         ]);
     }
 }

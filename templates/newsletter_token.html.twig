@@ -1,1 +1,16 @@
-{{ form(form) }}
+{{ form_start(form, {'attr': {'id': 'newsletter_form_token'}}) }}
+
+{% if error is defined and error == true %}
+    <div class="alert alert-danger">Unfortunately the provided confirmation token is not valid. Please check your
+        input.
+    </div>
+{% endif %}
+
+<div class="alert alert-info">Please check your e-mail for a confirmation token. You can also just click the link in the
+    e-mail :)
+</div>
+
+{{ form_errors(form) }}
+    {{ form_widget(form.token) }}
+    {{ form_widget(form.confirm) }}
+{{ form_end(form) }}

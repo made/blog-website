@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace App\Newsletter\Form;
+namespace App\Newsletter\FormType;
 
 use App\Form\Newsletter\NewsletterEmail;
 use App\Newsletter\Model\NewsletterToken;
@@ -37,8 +37,13 @@ class NewsletterTokenType extends AbstractType
     public function buildForm(FormBuilderInterface $formBuilder, array $options)
     {
         $formBuilder
-            ->add('token', TextType::class)
-            ->add('save', SubmitType::class);
+            ->add('token', TextType::class, [
+                'label' => false,
+                'attr' => ['class' => 'form-control',  'placeholder' => 'Token', 'aria-label' => 'Token']
+            ])
+            ->add('confirm', SubmitType::class, [
+                'attr' => ['class' => 'btn btn-primary'],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

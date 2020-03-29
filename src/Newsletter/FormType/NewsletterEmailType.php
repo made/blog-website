@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace App\Newsletter\Form;
+namespace App\Newsletter\FormType;
 
 use App\Form\Newsletter\NewsletterEmail;
 use Symfony\Component\Form\AbstractType;
@@ -36,8 +36,13 @@ class NewsletterEmailType extends AbstractType
     public function buildForm(FormBuilderInterface $formBuilder, array $options)
     {
         $formBuilder
-            ->add('email', EmailType::class)
-            ->add('save', SubmitType::class);
+            ->add('email', EmailType::class, [
+                'label' => false,
+                'attr' => ['class' => 'form-control',  'placeholder' => 'E-Mail', 'aria-label' => 'E-Mail'],
+            ])
+            ->add('register', SubmitType::class, [
+                'attr' => ['class' => 'btn btn-primary'], // ToDo: I REMOVED THE ID FROM HERE.
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
