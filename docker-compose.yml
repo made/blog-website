@@ -15,9 +15,36 @@ services:
       - DOCUMENT_ROOT=${DOCUMENT_ROOT-/var/www/html/}
       - PHP_MEMORY_LIMIT=${PHP_MEMORY_LIMIT-512M}
       - MAILER_URL=${MAILER_URL-none}
+    depends_on:
+      - database
 
   mailhog:
     image: mailhog/mailhog
     ports:
       - 1025:1025
       - 8025:8025
+
+  database:
+    image: mariadb
+    restart: always
+#    ports:
+#      - 3306:3306
+    volumes:
+      - database-data:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: blog_website
+      MYSQL_USER: blog_website
+      MYSQL_PASSWORD: admin
+      MYSQL_ROOT_PASSWORD: admin
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    ports:
+      - 8001:80
+    environment:
+      - PMA_HOST=database
+    depends_on:
+      - database
+
+volumes:
+  database-data:
