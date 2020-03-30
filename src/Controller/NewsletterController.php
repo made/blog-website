@@ -20,10 +20,11 @@
 
 namespace App\Controller;
 
-use App\Form\Newsletter\NewsletterEmail;
+use App\Newsletter\Model\NewsletterEmail;
 use App\Newsletter\FormType\NewsletterEmailType;
 use App\Newsletter\FormType\NewsletterTokenType;
 use App\Newsletter\Model\NewsletterToken;
+use App\Newsletter\Service\NewsletterService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,6 +44,16 @@ class NewsletterController extends AbstractController
     private const FORM_SUBMIT_STEP_2_NAME = 'newsletter_step_2_done';
 
     /**
+     * @var NewsletterService
+     */
+    private $newsletterService;
+
+    public function __construct(NewsletterService $newsletterService)
+    {
+        $this->newsletterService = $newsletterService;
+    }
+
+    /**
      * @Route(path="/newsletter_register", name="newsletter_register", methods={"POST"})
      * @param Request $request
      * @param SessionInterface $session
@@ -56,28 +67,33 @@ class NewsletterController extends AbstractController
         }
 
         $form = $this->createForm(NewsletterEmailType::class, new NewsletterEmail());
+        try {
 
-        if ($request->isXmlHttpRequest()) {
-            $form->handleRequest($request);
+            if ($request->isXmlHttpRequest()) {
+                $form->handleRequest($request);
 
-            /** @var NewsletterEmail $newsletterEmail */
-            $newsletterEmail = $form->getData();
+                /** @var NewsletterEmail $newsletterEmail */
+                $newsletterEmail = $form->getData();
 
-            if ($form->isSubmitted()) {
-                if ($form->isValid()) {
+                if ($form->isSubmitted()) {
+                    if (!$form->isValid()) {
+                        throw new \Exception('form invalid');
+                    }
+
+                    $this->newsletterService->registerEmail($newsletterEmail);
+
                     $session->set(static::FORM_SUBMIT_STEP_1_NAME, true);
                     $session->set(static::FORM_EMAIL, $newsletterEmail->getEmail());
 
-                    // ToDo: handle $form->getData()
-                    //  send email and store information in session to verify the token sent.
-                    //  also the token must be stored in the db with the hashed email address and maybe a salt to ensure spam prevention and safety
-                    //  each token is only valid for 24h
-
                     return $this->forward('App\Controller\NewsletterController::registerToken');
-                } else {
-                    $error = true;
                 }
             }
+
+        } catch (\Exception $exception) {
+            var_dump($exception->getMessage());
+            $error = true;
+            // ToDo: define a custom exception with the error message, then pass this to the template
+            //  Technical problems for example doctrine stuff need a general error message
         }
 
         return $this->render('elements/newsletter/newsletter_email.html.twig', [
@@ -103,25 +119,33 @@ class NewsletterController extends AbstractController
         }
 
         $form = $this->createForm(NewsletterTokenType::class, new NewsletterToken());
+        try {
+            /** @var NewsletterToken $token */
+            $token = $form->getData();
 
-        if ($request->isXmlHttpRequest()) {
-            $form->handleRequest($request);
-            if ($form->isSubmitted()) {
-                if ($form->isValid()) {
+            if ($request->isXmlHttpRequest()) {
+                $form->handleRequest($request);
+                if ($form->isSubmitted()) {
+                    if ($form->isValid()) {
 
-                    $session->set(static::FORM_SUBMIT_STEP_2_NAME, true);
+                        $email = $session->get(static::FORM_EMAIL);
 
-                    // ToDo: handle $form->getData()
-                    //  verify the token and add a date, when the account has been registered.
-                    //  then forward to below, if the token is wrong, display an error message
+                        $this->newsletterService->confirmToken($email, $token);
 
-                    return $this->forward('App\Controller\NewsletterController::registerSuccess');
-                } else {
-                    $error = true;
+                        $session->set(static::FORM_SUBMIT_STEP_2_NAME, true);
+
+                        return $this->forward('App\Controller\NewsletterController::registerSuccess');
+                    } else {
+                        $error = true;
+                    }
                 }
             }
-        }
 
+        } catch (\Exception $exception) {
+            var_dump($exception->getMessage());
+            $error = true;
+            // ToDo: also define custom exceptions here
+        }
         return $this->render('elements/newsletter/newsletter_token.html.twig', [
             'form' => $form->createView(),
             'error' => $error ?? false,
@@ -132,7 +156,8 @@ class NewsletterController extends AbstractController
     /**
      * @Route(path="/newsletter_register_success", name="newsletter_register_success", methods={"POST"})
      */
-    public function registerSuccess()
+    public
+    function registerSuccess()
     {
         return $this->render('elements/newsletter/newsletter_success.html.twig');
     }

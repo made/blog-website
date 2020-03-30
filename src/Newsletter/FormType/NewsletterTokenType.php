@@ -20,7 +20,6 @@
 
 namespace App\Newsletter\FormType;
 
-use App\Form\Newsletter\NewsletterEmail;
 use App\Newsletter\Model\NewsletterToken;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;

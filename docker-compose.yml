@@ -3,7 +3,7 @@ version: '3'
 
 services:
   web:
-    image: registry.made.dev/docker/alpine-nginx-php7:0.3
+    image: registry.made.dev/docker/alpine-nginx-php7:0.4
     # change this to the image of the actual project, currently it just shows to the base image
     restart: always
     volumes:

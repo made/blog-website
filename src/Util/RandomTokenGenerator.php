@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Made Blog
  * Copyright (c) 2019-2020 Made
@@ -18,37 +17,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace App\Newsletter\Model;
-
-use Symfony\Component\Validator\Constraints as Assert;
+namespace App\Util;
 
 /**
- * Class NewsletterEmail
- * @package App\Form\Newsletter
+ * Class RandomTokenGenerator
+ * @package App\Util
  */
-class NewsletterEmail
+class RandomTokenGenerator
 {
     /**
-     * @Assert\NotBlank()
-     * @Assert\Email()
+     * @return int
      */
-    protected $email;
-
-    /**
-     * @return string
-     */
-    public function getEmail(): ?string
+    public static function generate()
     {
-        return $this->email;
-    }
-
-    /**
-     * @param string $email
-     * @return NewsletterEmail
-     */
-    public function setEmail(string $email): NewsletterEmail
-    {
-        $this->email = $email;
-        return $this;
+        return rand(0, 999999);
     }
 }
