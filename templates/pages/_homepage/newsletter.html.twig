@@ -1,9 +1,9 @@
 {% if form_newsletter is not empty %}
-    <section class="newsletter banner-secondary mt-5 pt-5 pb-5 text-center text-white shadow-sm" id="section_newsletter">
+    <section class="newsletter banner-secondary mt-5 pt-5 pb-5 text-center text-white shadow-sm">
         <div class="container">
             <h2>Newsletter</h2>
             <p>Subscribe to our newsletter to receive updates and cookies :)</p>
-            <div class="form-inline justify-content-center position-relative">
+            <div class="form-inline justify-content-center position-relative" id="form_newsletter_container">
                 {{ form_newsletter|raw }}
             </div>
         </div>

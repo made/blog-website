@@ -24,21 +24,17 @@ Module('App.Newsletter', (function () {
      */
     function handleFormSubmitEmail(event) {
         event.preventDefault();
-        let formEmail = document.getElementById('newsletter_form_email');
-        let button = formEmail.querySelector('#newsletter_email_register');
-        let email = formEmail.querySelector('#newsletter_email_email');
-        button.disabled = true;
+        let form = document.getElementById('form_newsletter_container').getElementsByTagName('form')[0];
+        let email = form.querySelector('#newsletter_email_email');
 
         if (email.value) {
-            sendPostRequest('/newsletter_register', formEmail, function (element, response) {
+            sendPostRequest('/newsletter_register', form, function (element, response) {
                 element.outerHTML = response;
 
                 // This is necessary because the page is not reloaded (XHR)
                 // If the below function would not be called, then no event listener would be added to the newly fetched form.
                 registerEvent();
             });
-        } else {
-            button.disabled = false;
         }
     }
 
@@ -48,23 +44,46 @@ Module('App.Newsletter', (function () {
      */
     function handleFormSubmitToken(event) {
         event.preventDefault();
-        let formToken = document.getElementById('newsletter_form_token');
-        let button = formToken.querySelector('#newsletter_token_confirm');
-        let email = formToken.querySelector('#newsletter_token_token');
-        button.disabled = true;
+        let form = document.getElementById('form_newsletter_container').getElementsByTagName('form')[0];
+        let email = form.querySelector('#newsletter_token_token');
 
         if (email.value) {
-            sendPostRequest('/newsletter_register_token', formToken, function (element, response) {
+            sendPostRequest('/newsletter_register_token', form, function (element, response) {
                 element.outerHTML = response;
 
                 // This is necessary because the page is not reloaded (XHR)
                 // If the below function would not be called, then no event listener would be added to the newly fetched form.
                 registerEvent();
             })
-        } else {
-            button.disabled = false;
         }
 
+    }
+
+    /**
+     * @param event
+     */
+    function handleChangeEmail(event) {
+        let form = document.getElementById('form_newsletter_container').getElementsByTagName('form')[0];
+
+        sendPostRequest('/newsletter_register', form, function (element, response) {
+            element.outerHTML = response;
+
+            registerEvent();
+        });
+    }
+
+    /**
+     * @param event
+     */
+    function handleResendEmail(event) {
+        let form = document.getElementById('form_newsletter_container').getElementsByTagName('form')[0];
+
+        sendPostRequest('/newsletter_register_resend', form, function (element, response) {
+            element.outerHTML = response + element.outerHTML;
+            document.getElementById('loader').remove();
+
+            registerEvent();
+        });
     }
 
     /**
@@ -92,21 +111,39 @@ Module('App.Newsletter', (function () {
         request.send(new FormData(formElement));
 
         // Loader
-        formElement.innerHTML = '<div class="loader"><svg class="spinner" width="50px" height="50px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">\n' +
+        formElement.innerHTML = '<div class="loader" id ="loader"><svg class="spinner" width="50px" height="50px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">\n' +
             '   <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>\n' +
             '</svg><span class="pl-4">Loading chunks...</span></div>' + formElement.innerHTML
     }
 
+    /**
+     * Check which form is active to register the correct event
+     */
     function registerEvent() {
         // This needs to be placed here, since the page is not reloaded, we need to check everytime if the below elements exists.
-        let formEmail = document.getElementById('newsletter_form_email');
-        let formToken = document.getElementById('newsletter_form_token');
 
+        // This adds the event listener to the first step, when the user enters his email address
+        let formEmail = document.getElementById('newsletter_form_email');
         if (formEmail) {
             formEmail.addEventListener('submit', handleFormSubmitEmail);
         }
+
+        // This adds the event listener to the second step, when the user can activate his token
+        let formToken = document.getElementById('newsletter_form_token');
         if (formToken) {
             formToken.addEventListener('submit', handleFormSubmitToken);
+        }
+
+        // During the registration process in the second step the user can change his email address
+        let changeEmail = document.getElementById('change_email');
+        if (changeEmail) {
+            changeEmail.addEventListener('click', handleChangeEmail);
+        }
+
+        // During the registration process in the second step the user can resend his email address
+        let resendEmail = document.getElementById('resend_email');
+        if (resendEmail) {
+            resendEmail.addEventListener('click', handleResendEmail);
         }
     }
 
