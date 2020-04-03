@@ -44,7 +44,7 @@ class NewsletterRepository extends ServiceEntityRepository
 
     /**
      * @param string $email
-     * @return mixed
+     * @return Newsletter|null
      * @throws NonUniqueResultException
      */
     public function findByEmail(string $email)

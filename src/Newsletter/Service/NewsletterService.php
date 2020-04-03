@@ -20,6 +20,11 @@
 namespace App\Newsletter\Service;
 
 use App\Entity\Newsletter;
+use App\Mail\Service\MailService;
+use App\Newsletter\Exception\EmailAlreadyConfirmedException;
+use App\Newsletter\Exception\EmailExistsException;
+use App\Newsletter\Exception\GenericNewsletterException;
+use App\Newsletter\Exception\InvalidTokenException;
 use App\Newsletter\Model\NewsletterEmail;
 use App\Newsletter\Model\NewsletterToken;
 use App\Repository\NewsletterRepository;
@@ -28,7 +33,8 @@ use DateTime;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
-use Exception;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 /**
  * Class NewsletterService
@@ -42,59 +48,126 @@ class NewsletterService
     private $repository;
 
     /**
+     * @var MailService
+     */
+    private $mailService;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * NewsletterService constructor.
      * @param NewsletterRepository $repository
+     * @param MailService $mailService
+     * @param LoggerInterface $logger
      */
-    public function __construct(NewsletterRepository $repository)
+    public function __construct(NewsletterRepository $repository, MailService $mailService, LoggerInterface $logger)
     {
         $this->repository = $repository;
+        $this->mailService = $mailService;
+        $this->logger = $logger;
     }
 
     /**
      * @param NewsletterEmail $newsletterEmail
+     * @return void
+     * @throws EmailAlreadyConfirmedException
+     * @throws EmailExistsException
      * @throws NonUniqueResultException
      * @throws ORMException
      * @throws OptimisticLockException
+     * @throws TransportExceptionInterface
      */
-    public function registerEmail(NewsletterEmail $newsletterEmail)
+    public function registerEmail(NewsletterEmail $newsletterEmail): void
     {
-        $result = $this->repository->findByEmail($newsletterEmail->getEmail());
+        $newsletterEntity = $this->repository->findByEmail($newsletterEmail->getEmail());
 
-        if ($result) {
-            // ToDo: Custom Exception -> goto Token input
-            throw new Exception('email already exists bruh');
+        if ($newsletterEntity && $newsletterEntity->isConfirmed()) {
+            $this->logger->debug('email already confirmed.');
+            throw new EmailAlreadyConfirmedException('email already confirmed :)');
         }
+
+        if ($newsletterEntity) {
+            $this->logger->debug('email already exists.');
+            throw new EmailExistsException('email already exists bruh');
+        }
+        $this->logger->debug('email is new.');
+
+        $token = RandomTokenGenerator::generate();
 
         $newsletter = new Newsletter();
         $newsletter
             ->setEmail($newsletterEmail->getEmail())
+            ->setLocale($newsletterEmail->getLocale())
             ->setList(Newsletter::NEWSLETTER_LIST_NAME)
-            ->setToken(RandomTokenGenerator::generate())
+            ->setToken($token)
             ->setCreationDate(new DateTime());
 
-        return $this->repository->persist($newsletter);
+        $this->repository->persist($newsletter);
+        $this->logger->debug('email is persisted.');
+        // ToDo: An url must be generated here and also sent to the user to manually activate the newsletter
+        $this->sendConfirmationMail($newsletterEmail->getEmail(), $token);
     }
 
     /**
      * @param string $email
-     * @param NewsletterToken $token
+     * @param string $token
+     * @return void
+     * @throws InvalidTokenException
      * @throws NonUniqueResultException
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function confirmToken(string $email, NewsletterToken $token)
+    public function confirmToken(string $email, string $token)
     {
         /** @var Newsletter $result */
         $result = $this->repository->findByEmail($email);
 
-        if (!$result || $result->getToken() !== $token->getToken()) {
-            throw new Exception('no entry found in db or token invalid - confirm via e-mail');
+        if (!$result || $result->getToken() !== $token) {
+            throw new InvalidTokenException('The token you have provided is not valid.');
         }
 
         $result
-            ->setStatus(true)
+            ->setConfirmed(true)
             ->setConfirmationDate(new DateTime());
 
         return $this->repository->persist($result);
+    }
+
+    /**
+     * @param string $email
+     * @throws GenericNewsletterException
+     * @throws NonUniqueResultException
+     * @throws TransportExceptionInterface
+     */
+    public function resendEmail(string $email)
+    {
+        /** @var Newsletter $result */
+        $result = $this->repository->findByEmail($email);
+
+        if (!$result) {
+            throw new GenericNewsletterException('Email not found');
+        }
+
+        $this->sendConfirmationMail(
+            $result->getEmail(),
+            $result->getToken()
+        );
+    }
+
+    /**
+     * @param string $newsletterEmail
+     * @param string $token
+     * @throws TransportExceptionInterface
+     */
+    private function sendConfirmationMail(string $newsletterEmail, string $token): void
+    {
+        $this->mailService
+            ->withBody($token)
+            ->withSubject('Made Blog Newsletter Registration: Your Confirmation Token.')
+            ->setTo([$newsletterEmail])
+            ->send();
     }
 }

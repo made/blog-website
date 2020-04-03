@@ -1,7 +1,7 @@
 {{ form_start(form, {'attr': {'id': 'newsletter_form_email'}}) }}
 
-{% if error is defined and error == true %}
-    <div class="alert alert-danger">Unfortunately the provided e-mail is not valid. Please check your input.</div>
+{% if errorMessage is defined and errorMessage is not empty %}
+    <div class="alert alert-danger">{{ errorMessage }}</div>
 {% endif %}
 
     {{ form_errors(form) }}

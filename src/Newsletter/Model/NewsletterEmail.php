@@ -35,6 +35,11 @@ class NewsletterEmail
     protected $email;
 
     /**
+     * @var string
+     */
+    protected $locale;
+
+    /**
      * @return string
      */
     public function getEmail(): ?string
@@ -49,6 +54,24 @@ class NewsletterEmail
     public function setEmail(string $email): NewsletterEmail
     {
         $this->email = $email;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLocale(): string
+    {
+        return $this->locale;
+    }
+
+    /**
+     * @param string $locale
+     * @return NewsletterEmail
+     */
+    public function setLocale(string $locale): NewsletterEmail
+    {
+        $this->locale = $locale;
         return $this;
     }
 }

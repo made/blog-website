@@ -46,6 +46,13 @@ class Newsletter
      *
      * @ORM\Column(type="string")
      */
+    private $locale;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string")
+     */
     private $list;
 
     /**
@@ -67,7 +74,7 @@ class Newsletter
      *
      * @ORM\Column(type="smallint", length=1, options={"default" : 0})
      */
-    private $status = 0;
+    private $confirmed = 0;
 
     /**
      * @var DateTime
@@ -98,6 +105,24 @@ class Newsletter
     public function setId(int $id): Newsletter
     {
         $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLocale(): string
+    {
+        return $this->locale;
+    }
+
+    /**
+     * @param string $locale
+     * @return Newsletter
+     */
+    public function setLocale(string $locale): Newsletter
+    {
+        $this->locale = $locale;
         return $this;
     }
 
@@ -158,18 +183,18 @@ class Newsletter
     /**
      * @return bool
      */
-    public function isStatus(): bool
+    public function isConfirmed(): bool
     {
-        return $this->status;
+        return $this->confirmed;
     }
 
     /**
-     * @param bool $status
+     * @param bool $confirmed
      * @return Newsletter
      */
-    public function setStatus(bool $status): Newsletter
+    public function setConfirmed(bool $confirmed): Newsletter
     {
-        $this->status = $status;
+        $this->confirmed = $confirmed;
         return $this;
     }
 

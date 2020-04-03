@@ -1,22 +1,25 @@
 {{ form_start(form, {'attr': {'id': 'newsletter_form_token'}}) }}
 
-{% if error is defined and error == true %}
-    <div class="alert alert-danger">Unfortunately the provided confirmation token is not valid. Please check your
-        input.
+{% if errorMessage is defined and errorMessage is not empty %}
+    <div class="alert alert-danger">{{ errorMessage }}
     </div>
 {% endif %}
 
 <div class="alert alert-info">
     Please check your e-mail {{ email }} for the confirmation token. <br>
     You can also just click the link in the e-mail :)
-    <div class="pt-2">
-        <a href="#" class="p-2">Change E-Mail</a>
-        <a href="#" class="p-2">Resend E-Mail</a>
-    </div>
 </div>
 
-{{ form_errors(form) }}
-    {{ form_widget(form.token) }}
-    {{ form_widget(form.confirm) }}
+<div class="row">
+    <div class="col-md-12">
+        {{ form_errors(form) }}
+        {{ form_widget(form.token) }}
+        {{ form_widget(form.confirm) }}
+    </div>
 
+    <div class="col-md-12 pt-2">
+        <a onclick="alert('change email');" class="pr-2 cursor-pointer">Change E-Mail</a>
+        <a onclick="alert('resend email');" class="pl-2 cursor-pointer">Resend E-Mail</a>
+    </div>
+</div>
 {{ form_end(form) }}
