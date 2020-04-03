@@ -92,10 +92,9 @@ Module('App.Newsletter', (function () {
         request.send(new FormData(formElement));
 
         // Loader
-        formElement.innerHTML = '<div class="loader"><svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">\n' +
+        formElement.innerHTML = '<div class="loader"><svg class="spinner" width="50px" height="50px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">\n' +
             '   <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>\n' +
-            '</svg></div>' + formElement.innerHTML
-
+            '</svg><span class="pl-4">Loading chunks...</span></div>' + formElement.innerHTML
     }
 
     function registerEvent() {
