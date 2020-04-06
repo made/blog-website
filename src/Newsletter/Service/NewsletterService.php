@@ -19,7 +19,8 @@
 
 namespace App\Newsletter\Service;
 
-use App\Mail\Service\MailService;
+use App\Mailer\Model\MailConfiguration;
+use App\Mailer\Service\MailService;
 use App\Newsletter\Entity\Newsletter;
 use App\Newsletter\Exception\EmailAlreadyConfirmedException;
 use App\Newsletter\Exception\EmailExistsException;
@@ -158,15 +159,20 @@ class NewsletterService
 
     /**
      * @param string $newsletterEmail
-     * @param string $token
+     * @param string $registrationCode
      * @throws TransportExceptionInterface
      */
-    private function sendConfirmationMail(string $newsletterEmail, string $token): void
+    private function sendConfirmationMail(string $newsletterEmail, string $registrationCode): void
     {
-        $this->mailService
-            ->withBody($token)
-            ->withSubject('Made Blog Newsletter Registration: Your Confirmation Token.')
-            ->setTo([$newsletterEmail])
-            ->send();
+        $config = (new MailConfiguration())
+            // ToDo: create below template as soon as base is done :)
+            ->setTemplate('@newsletter/newsletter.html.twig')
+            ->setTemplateContext([
+                'code' => $registrationCode
+            ])
+            ->setSubject('Made Blog Newsletter Registration: Your Confirmation Token.')
+            ->setTo([$newsletterEmail]);
+
+        $this->mailService->send($config);
     }
 }

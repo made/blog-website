@@ -1,5 +1,5 @@
 twig:
     paths:
         '%kernel.project_dir%/templates': default
-        '%kernel.project_dir%/src/Newsletter/Resources/templates': newsletter
-        '%kernel.project_dir%/src/Mailing/Resources/templates': newsletter
+        '%kernel.project_dir%/src/Newsletter/Resource/templates': newsletter
+        '%kernel.project_dir%/src/Mailer/Resource/templates': mailer

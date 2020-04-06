@@ -18,17 +18,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace App\Mail\Service;
+namespace App\Mailer\Service;
 
-use App\Mail\Model\MailConfig;
+use App\Mailer\Model\MailConfiguration;
 use Psr\Log\LoggerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 
 /**
  * Class MailService
- * @package App\Mail\Service
+ * @package App\Mailer\Service
  */
 class MailService
 {
@@ -43,27 +44,7 @@ class MailService
     private $logger;
 
     /**
-     * @var array
-     */
-    private $to;
-
-    /**
-     * @var string
-     */
-    private $body;
-
-    /**
-     * @var string
-     */
-    private $subject;
-
-    /**
-     * @var string
-     */
-    private $attachmentPath;
-
-    /**
-     * @var MailConfig
+     * @var MailConfiguration
      */
     private $config;
 
@@ -76,22 +57,17 @@ class MailService
     {
         $this->mailer = $mailer;
         $this->logger = $logger;
-
-        // This should be injected as a config object later :)
-        $this->config = (new MailConfig())
-            ->setFrom('test@made.dev')
-            ->setTo(['dennis@made.dev'])
-            ->setBcc(['haha@made.dev'])
-            ->setSubject('Hello matey');
     }
 
     /**
+     * @param MailConfiguration $mailConfiguration
      * @throws TransportExceptionInterface
      */
-    public function send()
+    public function send(MailConfiguration $mailConfiguration)
     {
-        $message = $this->buildEmail();
+        $this->config = $mailConfiguration;
 
+        $message = $this->buildEmail();
         $this->mailer->send($message);
     }
 
@@ -100,12 +76,20 @@ class MailService
      */
     private function buildEmail(): Email
     {
-        $message = new Email();
+        $message = new TemplatedEmail();
         $message
             ->subject($this->config->getSubject())
-            ->html($this->config->getBody() ?? 'no body specified.')
+            ->html($this->config->getBody())
             ->from($this->config->getFrom())
             ->to(...$this->config->getTo());
+
+        if ($this->config->hasTemplate()) {
+            $message->htmlTemplate($this->config->getTemplate());
+            if ($this->config->hasTemplateContext()) {
+                $message->context($this->config->getTemplateContext());
+            }
+        }
+
 
         $this->logger->info('From: ' . $this->config->getFrom());
         $this->logger->info('To: ' . implode(' ; ', $this->config->getTo()));
@@ -120,57 +104,11 @@ class MailService
             $this->logger->info('BCC: ' . implode(', ', $this->config->getBcc()));
         }
 
-        if ($this->hasAttachment()) {
-            $message->attachFromPath($this->attachmentPath);
-            $this->logger->info('Attachment: ' . $this->attachmentPath);
+        if ($this->config->hasAttachment()) {
+            $message->attachFromPath($this->config->getAttachmentPath());
+            $this->logger->info('Attachment: ' . $this->config->getAttachmentPath());
         }
 
         return $message;
     }
-
-    /**
-     * @param string $body
-     * @return MailService
-     */
-    public function withBody(string $body): MailService
-    {
-        $this->config->setBody($body);
-        return $this;
-    }
-
-    /**
-     * @param string $subject
-     * @return MailService
-     */
-    public function withSubject(string $subject): MailService
-    {
-        $this->config->setSubject($subject);
-        return $this;
-    }
-
-    /**
-     * @param string $attachmentPath
-     * @return MailService
-     */
-    public function withAttachment(string $attachmentPath): MailService
-    {
-        $this->attachmentPath = $attachmentPath;
-        return $this;
-    }
-
-
-    public function setTo(array $to): MailService
-    {
-        $this->config->setTo($to);
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasAttachment(): bool
-    {
-        return !empty($this->attachmentPath);
-    }
-
 }

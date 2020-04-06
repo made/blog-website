@@ -25,6 +25,17 @@ class IndexController extends AbstractController
     const ALLOWED_LOCALES = ['en', 'de'];
 
     /**
+     * @Route("/test", name="test")
+     */
+    public function test()
+    {
+        return $this->render('@mailer/content_wrapper.html.twig', [
+            'email' => ['subject' => 'heello ym'],
+            'code' => 1337
+        ]);
+    }
+
+    /**
      * @Route("/", name="root")
      * @param Request $request
      * @return RedirectResponse

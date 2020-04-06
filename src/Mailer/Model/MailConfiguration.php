@@ -17,18 +17,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace App\Mail\Model;
+namespace App\Mailer\Model;
+
+use App\Mailer\Service\MailService;
 
 /**
  * Class MailConfig
- * @package App\Mail\Model
+ * @package App\Mailer\Model
  */
-class MailConfig
+class MailConfiguration
 {
     /**
      * @var string
      */
-    private $from;
+    private $from = 'noreply@made.dev';
 
     /**
      * @var array
@@ -48,12 +50,31 @@ class MailConfig
     /**
      * @var string|null
      */
-    private $subject;
+    private $subject = 'no subject specified.';
 
     /**
      * @var string|null
      */
-    private $body;
+    private $body = 'no body specified.';
+
+    /**
+     * @var string|null
+     */
+    private $attachmentPath;
+
+    /**
+     * Name of a twig template
+     *
+     * @var string|null
+     */
+    private $template;
+
+    /**
+     * Values that should be passed to the template
+     * @link https://symfony.com/doc/current/mailer.html#html-content
+     * @var array|null
+     */
+    private $templateContext;
 
     /**
      * @return bool
@@ -80,6 +101,30 @@ class MailConfig
     }
 
     /**
+     * @return bool
+     */
+    public function hasAttachment(): bool
+    {
+        return !empty($this->attachmentPath);
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasTemplate(): bool
+    {
+        return !empty($this->template);
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasTemplateContext(): bool
+    {
+        return !empty($this->templateContext);
+    }
+
+    /**
      * @return string
      */
     public function getFrom(): string
@@ -89,9 +134,9 @@ class MailConfig
 
     /**
      * @param string $from
-     * @return MailConfig
+     * @return MailConfiguration
      */
-    public function setFrom(string $from): MailConfig
+    public function setFrom(string $from): MailConfiguration
     {
         $this->from = $from;
         return $this;
@@ -107,9 +152,9 @@ class MailConfig
 
     /**
      * @param array $to
-     * @return MailConfig
+     * @return MailConfiguration
      */
-    public function setTo(array $to): MailConfig
+    public function setTo(array $to): MailConfiguration
     {
         $this->to = $to;
         return $this;
@@ -125,9 +170,9 @@ class MailConfig
 
     /**
      * @param array|null $cc
-     * @return MailConfig
+     * @return MailConfiguration
      */
-    public function setCc(?array $cc): MailConfig
+    public function setCc(?array $cc): MailConfiguration
     {
         $this->cc = $cc;
         return $this;
@@ -143,9 +188,9 @@ class MailConfig
 
     /**
      * @param array|null $bcc
-     * @return MailConfig
+     * @return MailConfiguration
      */
-    public function setBcc(?array $bcc): MailConfig
+    public function setBcc(?array $bcc): MailConfiguration
     {
         $this->bcc = $bcc;
         return $this;
@@ -161,9 +206,9 @@ class MailConfig
 
     /**
      * @param string|null $subject
-     * @return MailConfig
+     * @return MailConfiguration
      */
-    public function setSubject(?string $subject): MailConfig
+    public function setSubject(?string $subject): MailConfiguration
     {
         $this->subject = $subject;
         return $this;
@@ -179,11 +224,65 @@ class MailConfig
 
     /**
      * @param string|null $body
-     * @return MailConfig
+     * @return MailConfiguration
      */
-    public function setBody(?string $body): MailConfig
+    public function setBody(?string $body): MailConfiguration
     {
         $this->body = $body;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getAttachmentPath(): ?string
+    {
+        return $this->attachmentPath;
+    }
+
+    /**
+     * @param string|null $attachmentPath
+     * @return MailConfiguration
+     */
+    public function setAttachmentPath(?string $attachmentPath): MailConfiguration
+    {
+        $this->attachmentPath = $attachmentPath;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTemplate(): ?string
+    {
+        return $this->template;
+    }
+
+    /**
+     * @param string|null $template
+     * @return MailConfiguration
+     */
+    public function setTemplate(?string $template): MailConfiguration
+    {
+        $this->template = $template;
+        return $this;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getTemplateContext(): ?array
+    {
+        return $this->templateContext;
+    }
+
+    /**
+     * @param array|null $templateContext
+     * @return MailConfiguration
+     */
+    public function setTemplateContext(?array $templateContext): MailConfiguration
+    {
+        $this->templateContext = $templateContext;
         return $this;
     }
 }
