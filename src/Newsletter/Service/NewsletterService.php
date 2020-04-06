@@ -19,16 +19,15 @@
 
 namespace App\Newsletter\Service;
 
-use App\Entity\Newsletter;
 use App\Mail\Service\MailService;
+use App\Newsletter\Entity\Newsletter;
 use App\Newsletter\Exception\EmailAlreadyConfirmedException;
 use App\Newsletter\Exception\EmailExistsException;
 use App\Newsletter\Exception\GenericNewsletterException;
 use App\Newsletter\Exception\InvalidTokenException;
 use App\Newsletter\Model\NewsletterEmail;
-use App\Newsletter\Model\NewsletterToken;
-use App\Repository\NewsletterRepository;
-use App\Util\RandomTokenGenerator;
+use App\Newsletter\Repository\NewsletterRepository;
+use App\Util\RandomCodeGenerator;
 use DateTime;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\OptimisticLockException;
@@ -95,14 +94,14 @@ class NewsletterService
         }
         $this->logger->debug('email is new.');
 
-        $token = RandomTokenGenerator::generate();
+        $token = RandomCodeGenerator::generate();
 
         $newsletter = new Newsletter();
         $newsletter
             ->setEmail($newsletterEmail->getEmail())
             ->setLocale($newsletterEmail->getLocale())
             ->setList(Newsletter::NEWSLETTER_LIST_NAME)
-            ->setToken($token)
+            ->setCode($token)
             ->setCreationDate(new DateTime());
 
         $this->repository->persist($newsletter);
@@ -125,7 +124,7 @@ class NewsletterService
         /** @var Newsletter $result */
         $result = $this->repository->findByEmail($email);
 
-        if (!$result || $result->getToken() !== $token) {
+        if (!$result || $result->getCode() !== $token) {
             throw new InvalidTokenException('The token you have provided is not valid.');
         }
 
@@ -153,7 +152,7 @@ class NewsletterService
 
         $this->sendConfirmationMail(
             $result->getEmail(),
-            $result->getToken()
+            $result->getCode()
         );
     }
 

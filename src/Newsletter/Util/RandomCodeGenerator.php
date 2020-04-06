@@ -23,7 +23,7 @@ namespace App\Util;
  * Class RandomTokenGenerator
  * @package App\Util
  */
-class RandomTokenGenerator
+class RandomCodeGenerator
 {
     /**
      * @return int

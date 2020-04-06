@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Made Blog
  * Copyright (c) 2019-2020 Made
@@ -18,9 +17,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace App\Repository;
+namespace App\Newsletter\Repository;
 
-use App\Entity\Newsletter;
+use App\Newsletter\Entity\Newsletter;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\OptimisticLockException;
@@ -29,7 +28,7 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * Class NewsletterRepository
- * @package App\Repository
+ * @package App\Newsletter\Repository
  */
 class NewsletterRepository extends ServiceEntityRepository
 {

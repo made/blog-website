@@ -17,16 +17,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace App\Entity;
+namespace App\Newsletter\Entity;
 
 use DateTime;
-
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class Newsletter
- * @package App\Entity
- * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
+ *
+ * This class along with its repository should later be put in the /Newsletter directory for easy future extraction.
+ * Unfortunately it is not currently possible, because multiple sources are not supported.
+ * It works when defining two mappings, but then the doctrine migrations ignore the additional configuration.
+ *
+ * @link https://github.com/doctrine/DoctrineBundle/issues/209
+ *
+ * @package App\Newsletter\Entity
+ * @ORM\Entity(repositoryClass="App\Newsletter\Repository\NewsletterRepository")
  */
 class Newsletter
 {
@@ -67,14 +73,7 @@ class Newsletter
      *
      * @ORM\Column(type="string")
      */
-    private $token;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(type="smallint", length=1, options={"default" : 0})
-     */
-    private $confirmed = 0;
+    private $code;
 
     /**
      * @var DateTime
@@ -82,6 +81,13 @@ class Newsletter
      * @ORM\Column(type="datetime", options={"default" : "CURRENT_TIMESTAMP"})
      */
     private $creationDate;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(type="smallint", length=1, options={"default" : 0})
+     */
+    private $confirmed = 0;
 
     /**
      * @var DateTime
@@ -165,18 +171,18 @@ class Newsletter
     /**
      * @return string
      */
-    public function getToken(): string
+    public function getCode(): string
     {
-        return $this->token;
+        return $this->code;
     }
 
     /**
-     * @param string $token
+     * @param string $code
      * @return Newsletter
      */
-    public function setToken(string $token): Newsletter
+    public function setCode(string $code): Newsletter
     {
-        $this->token = $token;
+        $this->code = $code;
         return $this;
     }
 

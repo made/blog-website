@@ -131,7 +131,7 @@ class NewsletterController extends AbstractController
             $this->logger->error($exception->getMessage());
         }
 
-        return $this->render('elements/newsletter/newsletter_email.html.twig', [
+        return $this->render('@newsletter/newsletter_email.html.twig', [
             'form' => $form->createView(),
             'errorMessage' => $errorMessage ?? null
         ]);
@@ -182,7 +182,7 @@ class NewsletterController extends AbstractController
             $errorMessage = $exception->getMessage();
         }
 
-        return $this->render('elements/newsletter/newsletter_token.html.twig', [
+        return $this->render('@newsletter/newsletter_token.html.twig', [
             'form' => $form->createView(),
             'errorMessage' => $errorMessage ?? null,
             'email' => $session->get(static::FORM_EMAIL) ?? null
@@ -203,7 +203,7 @@ class NewsletterController extends AbstractController
             $this->logger->error($exception->getMessage());
         }
 
-        return $this->render('elements/newsletter/newsletter_resend.html.twig');
+        return $this->render('@newsletter/newsletter_resend.html.twig');
     }
 
     /**
@@ -211,6 +211,6 @@ class NewsletterController extends AbstractController
      */
     public function registerSuccess()
     {
-        return $this->render('elements/newsletter/newsletter_success.html.twig');
+        return $this->render('@newsletter/newsletter_success.html.twig');
     }
 }
