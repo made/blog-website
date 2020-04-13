@@ -17,19 +17,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace App\Util;
+namespace App\Newsletter\Exception;
 
 /**
- * Class RandomTokenGenerator
- * @package App\Util
+ * Class InvalidTokenException
+ * @package App\Newsletter\Exception
  */
-class RandomCodeGenerator
+class TokenInvalidException extends \Exception
 {
-    /**
-     * @return int
-     */
-    public static function generate()
-    {
-        return rand(0, 999999);
-    }
+
 }

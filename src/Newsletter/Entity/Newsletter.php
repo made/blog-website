@@ -73,7 +73,14 @@ class Newsletter
      *
      * @ORM\Column(type="string")
      */
-    private $code;
+    private $activationCode;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string")
+     */
+    private $activationTokenUrl;
 
     /**
      * @var DateTime
@@ -87,14 +94,14 @@ class Newsletter
      *
      * @ORM\Column(type="smallint", length=1, options={"default" : 0})
      */
-    private $confirmed = 0;
+    private $activated = 0;
 
     /**
      * @var DateTime
      *
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $confirmationDate;
+    private $activationDate;
 
     /**
      * @return int
@@ -171,36 +178,54 @@ class Newsletter
     /**
      * @return string
      */
-    public function getCode(): string
+    public function getActivationCode(): string
     {
-        return $this->code;
+        return $this->activationCode;
     }
 
     /**
-     * @param string $code
+     * @param string $activationCode
      * @return Newsletter
      */
-    public function setCode(string $code): Newsletter
+    public function setActivationCode(string $activationCode): Newsletter
     {
-        $this->code = $code;
+        $this->activationCode = $activationCode;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getActivationTokenUrl(): string
+    {
+        return $this->activationTokenUrl;
+    }
+
+    /**
+     * @param string $activationTokenUrl
+     * @return Newsletter
+     */
+    public function setActivationTokenUrl(string $activationTokenUrl): Newsletter
+    {
+        $this->activationTokenUrl = $activationTokenUrl;
         return $this;
     }
 
     /**
      * @return bool
      */
-    public function isConfirmed(): bool
+    public function isActivated(): bool
     {
-        return $this->confirmed;
+        return $this->activated;
     }
 
     /**
-     * @param bool $confirmed
+     * @param bool $activated
      * @return Newsletter
      */
-    public function setConfirmed(bool $confirmed): Newsletter
+    public function setActivated(bool $activated): Newsletter
     {
-        $this->confirmed = $confirmed;
+        $this->activated = $activated;
         return $this;
     }
 
@@ -225,18 +250,18 @@ class Newsletter
     /**
      * @return DateTime
      */
-    public function getConfirmationDate(): DateTime
+    public function getActivationDate(): DateTime
     {
-        return $this->confirmationDate;
+        return $this->activationDate;
     }
 
     /**
-     * @param DateTime $confirmationDate
+     * @param DateTime $activationDate
      * @return Newsletter
      */
-    public function setConfirmationDate(DateTime $confirmationDate): Newsletter
+    public function setActivationDate(DateTime $activationDate): Newsletter
     {
-        $this->confirmationDate = $confirmationDate;
+        $this->activationDate = $activationDate;
         return $this;
     }
 }

@@ -1,10 +1,12 @@
-Hello,
-
 {% block body %}
+Hello,
 You are almost subscribed!
 Your registration code is {{ code }}.
-{% endblock %}
 
+You can also activate your email by clicking the below link.
+If you are not able to click this link, you can also copy and paste it into your browser.
+{{ activationUrl }}
 
 Greeting from your
 Made Team
+{% endblock %}

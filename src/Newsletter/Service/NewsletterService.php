@@ -22,18 +22,22 @@ namespace App\Newsletter\Service;
 use App\Mailer\Model\MailConfiguration;
 use App\Mailer\Service\MailService;
 use App\Newsletter\Entity\Newsletter;
-use App\Newsletter\Exception\EmailAlreadyConfirmedException;
+use App\Newsletter\Exception\EmailAlreadyActivatedException;
 use App\Newsletter\Exception\EmailExistsException;
+use App\Newsletter\Exception\EmailNotFoundException;
 use App\Newsletter\Exception\GenericNewsletterException;
-use App\Newsletter\Exception\InvalidTokenException;
+use App\Newsletter\Exception\NewsletterDatabaseException;
+use App\Newsletter\Exception\NewsletterMailerException;
+use App\Newsletter\Exception\TokenInvalidException;
 use App\Newsletter\Model\NewsletterEmail;
 use App\Newsletter\Repository\NewsletterRepository;
-use App\Util\RandomCodeGenerator;
+use App\Util\RandomGenerator;
 use DateTime;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 /**
@@ -58,120 +62,236 @@ class NewsletterService
     private $logger;
 
     /**
+     * @var RequestStack
+     */
+    private $requestStack;
+
+    /**
      * NewsletterService constructor.
      * @param NewsletterRepository $repository
      * @param MailService $mailService
      * @param LoggerInterface $logger
+     * @param RequestStack $requestStack
      */
-    public function __construct(NewsletterRepository $repository, MailService $mailService, LoggerInterface $logger)
+    public function __construct(NewsletterRepository $repository, MailService $mailService, LoggerInterface $logger, RequestStack $requestStack)
     {
         $this->repository = $repository;
         $this->mailService = $mailService;
         $this->logger = $logger;
+        $this->requestStack = $requestStack;
     }
 
     /**
      * @param NewsletterEmail $newsletterEmail
      * @return void
-     * @throws EmailAlreadyConfirmedException
+     * @throws EmailAlreadyActivatedException
      * @throws EmailExistsException
-     * @throws NonUniqueResultException
-     * @throws ORMException
-     * @throws OptimisticLockException
-     * @throws TransportExceptionInterface
+     * @throws EmailNotFoundException
+     * @throws NewsletterDatabaseException
+     * @throws NewsletterMailerException
      */
     public function registerEmail(NewsletterEmail $newsletterEmail): void
     {
-        $newsletterEntity = $this->repository->findByEmail($newsletterEmail->getEmail());
+        try {
+            $email = $newsletterEmail->getEmail();
+            $newsletterEntity = $this->repository->findByEmail($email);
 
-        if ($newsletterEntity && $newsletterEntity->isConfirmed()) {
-            $this->logger->debug('email already confirmed.');
-            throw new EmailAlreadyConfirmedException('email already confirmed :)');
+            if ($newsletterEntity && $newsletterEntity->isActivated()) {
+                $this->logger->debug("The E-Mail $email is already confirmed.");
+                throw new EmailAlreadyActivatedException("The E-Mail $email is already confirmed.");
+            }
+
+            if ($newsletterEntity) {
+                $this->logger->debug("The E-Mail $email already exists.");
+                throw new EmailExistsException("The E-Mail $email already exists.");
+            }
+            $this->logger->debug("The E-Mail $email is not registered yet.");
+
+            $activationCode = RandomGenerator::generateActivationCode();
+            $urlActivationToken = RandomGenerator::generateUrlActivationToken();
+            $this->mapToEntityAndPersistToDatabase($newsletterEmail, $activationCode, $urlActivationToken);
+
+            $this->sendConfirmationMail(
+                $email,
+                $activationCode,
+                $this->generateOrProvideActivationUrl($email)
+            );
+
+        } catch (NonUniqueResultException|ORMException|OptimisticLockException $exception) {
+            throw new NewsletterDatabaseException($exception->getMessage(), $exception->getCode(), $exception);
+        } catch (TransportExceptionInterface $exception) {
+            throw new NewsletterMailerException($exception->getMessage(), $exception->getCode(), $exception);
         }
-
-        if ($newsletterEntity) {
-            $this->logger->debug('email already exists.');
-            throw new EmailExistsException('email already exists bruh');
-        }
-        $this->logger->debug('email is new.');
-
-        $token = RandomCodeGenerator::generate();
-
-        $newsletter = new Newsletter();
-        $newsletter
-            ->setEmail($newsletterEmail->getEmail())
-            ->setLocale($newsletterEmail->getLocale())
-            ->setList(Newsletter::NEWSLETTER_LIST_NAME)
-            ->setCode($token)
-            ->setCreationDate(new DateTime());
-
-        $this->repository->persist($newsletter);
-        $this->logger->debug('email is persisted.');
-        // ToDo: An url must be generated here and also sent to the user to manually activate the newsletter
-        $this->sendConfirmationMail($newsletterEmail->getEmail(), $token);
     }
 
     /**
      * @param string $email
      * @param string $token
      * @return void
-     * @throws InvalidTokenException
-     * @throws NonUniqueResultException
-     * @throws ORMException
-     * @throws OptimisticLockException
+     * @throws NewsletterDatabaseException
+     * @throws TokenInvalidException
      */
-    public function confirmToken(string $email, string $token)
+    public function activateViaToken(string $email, string $token): void
     {
-        /** @var Newsletter $result */
-        $result = $this->repository->findByEmail($email);
+        try {
+            $result = $this->repository->findByEmail($email);
 
-        if (!$result || $result->getCode() !== $token) {
-            throw new InvalidTokenException('The token you have provided is not valid.');
+            if (!$result || $result->getActivationCode() !== $token) {
+                throw new TokenInvalidException('The token you have provided is not valid.');
+            }
+
+            $this->repository->activate($result);
+        } catch (NonUniqueResultException|OptimisticLockException|ORMException $exception) {
+            throw new NewsletterDatabaseException($exception->getMessage(), $exception->getCode(), $exception);
         }
-
-        $result
-            ->setConfirmed(true)
-            ->setConfirmationDate(new DateTime());
-
-        return $this->repository->persist($result);
     }
 
     /**
      * @param string $email
-     * @throws GenericNewsletterException
-     * @throws NonUniqueResultException
-     * @throws TransportExceptionInterface
+     * @throws EmailNotFoundException
+     * @throws NewsletterDatabaseException
+     * @throws NewsletterMailerException
      */
     public function resendEmail(string $email)
     {
-        /** @var Newsletter $result */
-        $result = $this->repository->findByEmail($email);
+        try {
+            $result = $this->repository->findByEmail($email);
 
-        if (!$result) {
-            throw new GenericNewsletterException('Email not found');
+            if (!$result) {
+                $this->logger->debug("The E-Mail $email can not be found in the database.");
+                throw new EmailNotFoundException("The E-Mail $email can not be found in the database.");
+            }
+
+            $this->sendConfirmationMail(
+                $result->getEmail(),
+                $result->getActivationCode(),
+                $this->generateOrProvideActivationUrl($result->getEmail())
+            );
+        } catch (NonUniqueResultException $exception) {
+            throw new NewsletterDatabaseException($exception->getMessage(), $exception->getCode(), $exception);
+        } catch (TransportExceptionInterface $exception) {
+            throw new NewsletterMailerException($exception->getMessage(), $exception->getCode(), $exception);
         }
 
-        $this->sendConfirmationMail(
-            $result->getEmail(),
-            $result->getCode()
-        );
     }
 
     /**
-     * @param string $newsletterEmail
+     * @param string $hashedEmail
+     * @param string $activationToken
+     * @throws EmailAlreadyActivatedException
+     * @throws EmailNotFoundException
+     * @throws GenericNewsletterException
+     * @throws NewsletterDatabaseException
+     * @throws TokenInvalidException
+     */
+    public function activateViaUrl(string $hashedEmail, string $activationToken): void
+    {
+        try {
+            $email = base64_decode($hashedEmail);
+
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $this->logger->error('Someone tried to manipulate the email: ' . $email);
+                throw new GenericNewsletterException("This email can not be found in the database.");
+            }
+
+            $result = $this->repository->findByEmail($email);
+
+            if (!$result) {
+                $this->logger->debug("The E-Mail $email can not be found in the database.");
+                throw new EmailNotFoundException("This email can not be found in the database.");
+            }
+
+            if ($result->isActivated()) {
+                $this->logger->debug("The E-Mail $email can not be found in the database.");
+                throw new EmailAlreadyActivatedException("This email is already activated.");
+            }
+
+            if ($activationToken !== $result->getActivationTokenUrl()) {
+                $this->logger->warning("The activation token $activationToken is not the same as the expected " . $result->getActivationTokenUrl());
+                throw new TokenInvalidException('Unfortunately the Activation Token is invalid.');
+            }
+
+            $this->repository->activate($result);
+        } catch (NonUniqueResultException|ORMException|OptimisticLockException $exception) {
+            throw new NewsletterDatabaseException($exception->getMessage(), $exception->getCode(), $exception);
+        }
+
+    }
+
+    /**
+     * @param string $email
+     * @return string
+     * @throws EmailNotFoundException
+     * @throws NewsletterDatabaseException
+     */
+    private function generateOrProvideActivationUrl(string $email): string
+    {
+        try {
+            $result = $this->repository->findByEmail($email);
+
+            if (!$result) {
+                $this->logger->debug("The E-Mail $email can not be found in the database.");
+                throw new EmailNotFoundException("The E-Mail $email can not be found in the database.");
+            }
+
+            // If no url token exists, then create a new one.
+            if (empty($result->getActivationTokenUrl())) {
+                $urlToken = RandomGenerator::generateUrlActivationToken();
+                $result->setActivationTokenUrl($urlToken);
+                $this->repository->persist($result);
+            } else {
+                $urlToken = $result->getActivationTokenUrl();
+            }
+
+            $emailBase64 = base64_encode($email);
+
+            // ToDo: This should later be configurable, since the newsletter service will be a standalone service.
+            return $this->requestStack->getMasterRequest()->getSchemeAndHttpHost() . "/newsletter/activate/url/$emailBase64/" . $urlToken;
+
+        } catch (NonUniqueResultException|ORMException|OptimisticLockException $exception) {
+            throw new NewsletterDatabaseException($exception->getMessage(), $exception->getCode(), $exception);
+        }
+    }
+
+    /**
+     * @param NewsletterEmail $newsletterEmail
+     * @param string $token
+     * @param string $urlActivationToken
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    private function mapToEntityAndPersistToDatabase(NewsletterEmail $newsletterEmail, string $token, string $urlActivationToken)
+    {
+        $newsletter = new Newsletter();
+        $newsletter
+            ->setEmail($newsletterEmail->getEmail())
+            ->setLocale($newsletterEmail->getLocale())
+            ->setList(Newsletter::NEWSLETTER_LIST_NAME)
+            ->setActivationCode($token)
+            ->setActivationTokenUrl($urlActivationToken)
+            ->setCreationDate(new DateTime());
+
+        $this->repository->persist($newsletter);
+        $this->logger->debug("The E-Mail" . $newsletterEmail->getEmail() . " has been persisted to the database.");
+    }
+
+    /**
+     * @param string $to
      * @param string $registrationCode
+     * @param string $activationUrl
      * @throws TransportExceptionInterface
      */
-    private function sendConfirmationMail(string $newsletterEmail, string $registrationCode): void
+    private function sendConfirmationMail(string $to, string $registrationCode, string $activationUrl): void
     {
         $config = (new MailConfiguration())
             ->setHtmlTemplate('@newsletter/mail/newsletter_registration.html.twig')
             ->setTextTemplate('@newsletter/mail/newsletter_registration.txt.twig')
             ->setTemplateContext([
-                'code' => $registrationCode
+                'code' => $registrationCode,
+                'activationUrl' => $activationUrl
             ])
             ->setSubject('Made Blog Newsletter Registration: Your Confirmation Token.')
-            ->setTo([$newsletterEmail]);
+            ->setTo([$to]);
 
         $this->mailService->send($config);
     }

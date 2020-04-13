@@ -46,7 +46,7 @@ class NewsletterRepository extends ServiceEntityRepository
      * @return Newsletter|null
      * @throws NonUniqueResultException
      */
-    public function findByEmail(string $email)
+    public function findByEmail(string $email): ?Newsletter
     {
         $qb = $this->_em->createQueryBuilder()
             ->select('n')
@@ -67,7 +67,21 @@ class NewsletterRepository extends ServiceEntityRepository
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function persist(Newsletter $newsletter)
+    public function activate(Newsletter $newsletter): void
+    {
+        $newsletter
+            ->setActivated(true)
+            ->setActivationDate(new \DateTime());
+
+        $this->persist($newsletter);
+    }
+
+    /**
+     * @param Newsletter $newsletter
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function persist(Newsletter $newsletter): void
     {
         $this->_em->persist($newsletter);
         $this->_em->flush();

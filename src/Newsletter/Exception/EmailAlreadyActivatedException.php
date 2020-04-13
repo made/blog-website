@@ -20,10 +20,10 @@
 namespace App\Newsletter\Exception;
 
 /**
- * Class InvalidTokenException
+ * Class EmailAlreadyConfirmedException
  * @package App\Newsletter\Exception
  */
-class InvalidTokenException extends \Exception
+class EmailAlreadyActivatedException extends \Exception
 {
 
 }

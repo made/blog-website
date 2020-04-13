@@ -17,13 +17,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace App\Newsletter\Exception;
+namespace App\Util;
 
 /**
- * Class EmailAlreadyConfirmedException
- * @package App\Newsletter\Exception
+ * Class RandomTokenGenerator
+ * @package App\Util
  */
-class EmailAlreadyConfirmedException extends \Exception
+class RandomGenerator
 {
+    /**
+     * @return int
+     */
+    public static function generateActivationCode()
+    {
+        return rand(0, 999999);
+    }
 
+    /**
+     * @return string
+     */
+    public static function generateUrlActivationToken()
+    {
+        return md5(time());
+    }
 }

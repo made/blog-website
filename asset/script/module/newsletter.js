@@ -28,7 +28,7 @@ Module('App.Newsletter', (function () {
         let email = form.querySelector('#newsletter_email_email');
 
         if (email.value) {
-            sendPostRequest('/newsletter_register', form, function (element, response) {
+            sendPostRequest('/newsletter/register', form, function (element, response) {
                 element.outerHTML = response;
 
                 // This is necessary because the page is not reloaded (XHR)
@@ -48,7 +48,7 @@ Module('App.Newsletter', (function () {
         let email = form.querySelector('#newsletter_token_token');
 
         if (email.value) {
-            sendPostRequest('/newsletter_register_token', form, function (element, response) {
+            sendPostRequest('/newsletter/activate/code', form, function (element, response) {
                 element.outerHTML = response;
 
                 // This is necessary because the page is not reloaded (XHR)
@@ -65,7 +65,7 @@ Module('App.Newsletter', (function () {
     function handleChangeEmail(event) {
         let form = document.getElementById('form_newsletter_container').getElementsByTagName('form')[0];
 
-        sendPostRequest('/newsletter_register', form, function (element, response) {
+        sendPostRequest('/newsletter/register', form, function (element, response) {
             element.outerHTML = response;
 
             registerEvent();
@@ -78,7 +78,7 @@ Module('App.Newsletter', (function () {
     function handleResendEmail(event) {
         let form = document.getElementById('form_newsletter_container').getElementsByTagName('form')[0];
 
-        sendPostRequest('/newsletter_register_resend', form, function (element, response) {
+        sendPostRequest('/newsletter/activate/resend', form, function (element, response) {
             element.outerHTML = response + element.outerHTML;
             document.getElementById('loader').remove();
 
