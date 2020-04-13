@@ -29,6 +29,7 @@ Module('App.Newsletter', (function () {
 
         if (email.value) {
             sendPostRequest('/newsletter/register', form, function (element, response) {
+                cleanAlerts();
                 element.outerHTML = response;
 
                 // This is necessary because the page is not reloaded (XHR)
@@ -49,6 +50,7 @@ Module('App.Newsletter', (function () {
 
         if (email.value) {
             sendPostRequest('/newsletter/activate/code', form, function (element, response) {
+                cleanAlerts();
                 element.outerHTML = response;
 
                 // This is necessary because the page is not reloaded (XHR)
@@ -66,6 +68,7 @@ Module('App.Newsletter', (function () {
         let form = document.getElementById('form_newsletter_container').getElementsByTagName('form')[0];
 
         sendPostRequest('/newsletter/register', form, function (element, response) {
+            cleanAlerts();
             element.outerHTML = response;
 
             registerEvent();
@@ -79,6 +82,8 @@ Module('App.Newsletter', (function () {
         let form = document.getElementById('form_newsletter_container').getElementsByTagName('form')[0];
 
         sendPostRequest('/newsletter/activate/resend', form, function (element, response) {
+            cleanAlerts();
+
             element.outerHTML = response + element.outerHTML;
             document.getElementById('loader').remove();
 
@@ -114,6 +119,11 @@ Module('App.Newsletter', (function () {
         formElement.innerHTML = '<div class="loader" id ="loader"><svg class="spinner" width="50px" height="50px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">\n' +
             '   <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>\n' +
             '</svg><span class="pl-4">Loading chunks...</span></div>' + formElement.innerHTML
+    }
+
+    function cleanAlerts() {
+        let alerts = document.getElementsByClassName('alert-temporary');
+        while (alerts.length > 0) alerts[0].remove();
     }
 
     /**

@@ -191,15 +191,17 @@ class NewsletterController extends AbstractController
 
     /**
      * @Route(path="/activate/url/{hashedEmail}/{activationToken}")
+     * @param SessionInterface $session
      * @param string $hashedEmail
      * @param string $activationToken
      * @return Response
      */
-    public function activateViaUrl(string $hashedEmail, string $activationToken)
+    public function activateViaUrl(SessionInterface $session, string $hashedEmail, string $activationToken)
     {
         $feedback = 'E-Mail successfully activated.';
         try {
             $this->newsletterService->activateViaUrl($hashedEmail, $activationToken);
+            $session->set(static::FORM_SUBMIT_STEP_2_NAME, true);
         } catch (EmailNotFoundException|EmailAlreadyActivatedException|TokenInvalidException $exception) {
             $feedback = $exception->getMessage();
         } catch (NewsletterDatabaseException|GenericNewsletterException $exception) {

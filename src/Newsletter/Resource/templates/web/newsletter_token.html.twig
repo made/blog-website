@@ -1,7 +1,7 @@
 {{ form_start(form, {'attr': {'id': 'newsletter_form_token'}}) }}
 
 {% if errorMessage is defined and errorMessage is not empty %}
-    <div class="alert alert-danger">{{ errorMessage }}
+    <div class="alert alert-danger alert-temporary">{{ errorMessage }}
     </div>
 {% endif %}
 
@@ -10,7 +10,7 @@
     You can also just click the link in the e-mail :)
 </div>
 
-<div class="row">
+<div class="row form-inline">
     <div class="col-md-12">
         {{ form_errors(form) }}
         {{ form_widget(form.token) }}

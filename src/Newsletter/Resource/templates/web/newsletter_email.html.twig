@@ -1,10 +1,12 @@
 {{ form_start(form, {'attr': {'id': 'newsletter_form_email'}}) }}
 
 {% if errorMessage is defined and errorMessage is not empty %}
-    <div class="alert alert-danger">{{ errorMessage }}</div>
+    <div class="alert alert-danger alert-temporary">{{ errorMessage }}</div>
 {% endif %}
 
+<div class="form-inline justify-content-center">
     {{ form_errors(form) }}
     {{ form_widget(form.email) }}
     {{ form_widget(form.register) }}
+</div>
 {{ form_end(form) }}

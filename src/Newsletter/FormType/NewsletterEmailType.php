@@ -41,7 +41,7 @@ class NewsletterEmailType extends AbstractType
                 'attr' => ['class' => 'form-control',  'placeholder' => 'E-Mail', 'aria-label' => 'E-Mail'],
             ])
             ->add('register', SubmitType::class, [
-                'attr' => ['class' => 'btn btn-primary'], // ToDo: I REMOVED THE ID FROM HERE.
+                'attr' => ['class' => 'btn btn-primary'],
             ]);
     }
 
