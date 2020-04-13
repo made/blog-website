@@ -165,8 +165,8 @@ class NewsletterService
     private function sendConfirmationMail(string $newsletterEmail, string $registrationCode): void
     {
         $config = (new MailConfiguration())
-            // ToDo: create below template as soon as base is done :)
-            ->setTemplate('@newsletter/newsletter.html.twig')
+            ->setHtmlTemplate('@newsletter/mail/newsletter_registration.html.twig')
+            ->setTextTemplate('@newsletter/mail/newsletter_registration.txt.twig')
             ->setTemplateContext([
                 'code' => $registrationCode
             ])

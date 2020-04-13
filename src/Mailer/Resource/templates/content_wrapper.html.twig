@@ -2,11 +2,18 @@
 
 {% set border = 0 %}
 
+{% set icon_website_base64_svg = "PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OTUuOSA0OTYiPjxwYXRoIGQ9Ik0zMzYuNSwxNjBDMzIyLDcwLjcsMjg3LjgsOCwyNDgsOHMtNzQsNjIuNy04OC41LDE1MlpNMTUyLDI1NmE2MjYuOCw2MjYuOCwwLDAsMCwzLjMsNjRIMzQwLjZhNjI2LjgsNjI2LjgsMCwwLDAsMy4zLTY0LDYyNi44LDYyNi44LDAsMCwwLTMuMy02NEgxNTUuM0E2MjYuOCw2MjYuOCwwLDAsMCwxNTIsMjU2Wm0zMjQuNy05NmEyNDguNSwyNDguNSwwLDAsMC0xNTgtMTQxLjZjMjQuNCwzMy44LDQxLjIsODQuNyw1MCwxNDEuNlpNMTc3LjIsMTguNEEyNDguNCwyNDguNCwwLDAsMCwxOS4zLDE2MGgxMDhjOC43LTU2LjksMjUuNS0xMDcuOCw0OS45LTE0MS42Wk00ODcuNCwxOTJIMzcyLjdjMi4xLDIxLDMuMyw0Mi41LDMuMyw2NHMtMS4yLDQzLTMuMyw2NEg0ODcuM2EyNDUuOSwyNDUuOSwwLDAsMCw4LjYtNjQsMjUwLjIsMjUwLjIsMCwwLDAtOC41LTY0Wk0xMjAsMjU2YzAtMjEuNSwxLjItNDMsMy4zLTY0SDguNmEyNDIuNCwyNDIuNCwwLDAsMCwwLDEyOEgxMjMuMkMxMjEuMiwyOTksMTIwLDI3Ny41LDEyMCwyNTZabTM5LjUsOTZDMTc0LDQ0MS4zLDIwOC4yLDUwNCwyNDgsNTA0czc0LTYyLjcsODguNS0xNTJaTTMxOC44LDQ5My42QTI0OC44LDI0OC44LDAsMCwwLDQ3Ni44LDM1MmgtMTA4QzM2MCw0MDguOSwzNDMuMiw0NTkuOCwzMTguOCw0OTMuNlpNMTkuMywzNTJhMjQ4LjUsMjQ4LjUsMCwwLDAsMTU4LDE0MS42Yy0yNC40LTMzLjgtNDEuMi04NC43LTUwLTE0MS42WiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAtOCkiIGZpbGw9IiNmZmYiLz48L3N2Zz4=" %}
+{% set icon_twitter_base64_svg =  "PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNDE1LjgiPjxwYXRoIGQ9Ik00NTkuNCwxNTEuN2MuMyw0LjYuMyw5LjEuMywxMy43LDAsMTM4LjctMTA1LjYsMjk4LjUtMjk4LjYsMjk4LjVBMjk2LjUsMjk2LjUsMCwwLDEsMCw0MTYuOGEyMTEuMSwyMTEuMSwwLDAsMCwyNS4zLDEuMywyMTAuNCwyMTAuNCwwLDAsMCwxMzAuMy00NC44LDEwNS4yLDEwNS4yLDAsMCwxLTk4LjEtNzIuOCwxMjksMTI5LDAsMCwwLDE5LjgsMS42LDExNCwxMTQsMCwwLDAsMjcuNi0zLjUsMTA1LjEsMTA1LjEsMCwwLDEtODQuMS0xMDN2LTEuM2ExMDYuMywxMDYuMywwLDAsMCw0Ny40LDEzLjNBMTA1LjEsMTA1LjEsMCwwLDEsMzUuNyw2Ny4yLDI5OC41LDI5OC41LDAsMCwwLDI1Mi4xLDE3Ny4xYTEyMSwxMjEsMCwwLDEtMi42LTI0LjFBMTA1LjEsMTA1LjEsMCwwLDEsNDMxLjEsODEuMmEyMDUuNiwyMDUuNiwwLDAsMCw2Ni42LTI1LjMsMTA1LjEsMTA1LjEsMCwwLDEtNDYuMSw1Ny44QTIxMS41LDIxMS41LDAsMCwwLDUxMiw5Ny41YTIyNS43LDIyNS43LDAsMCwxLTUyLjYsNTQuMloiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAgLTQ4LjEpIiBmaWxsPSIjZmZmIi8+PC9zdmc+" %}
+{% set icon_instagram_base64_svg =  "PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0NDguMyA0NDguMiI+PHBhdGggZD0iTTIyNC4xLDE0MUExMTQuOSwxMTQuOSwwLDEsMCwzMzksMjU1LjksMTE0LjcsMTE0LjcsMCwwLDAsMjI0LjEsMTQxWm0wLDE4OS42YTc0LjcsNzQuNywwLDEsMSw3NC43LTc0LjcsNzQuOCw3NC44LDAsMCwxLTc0LjcsNzQuN1pNMzcwLjUsMTM2LjNhMjYuOCwyNi44LDAsMSwxLTI2LjgtMjYuOEEyNi43LDI2LjcsMCwwLDEsMzcwLjUsMTM2LjNabTc2LjEsMjcuMmMtMS43LTM1LjktOS45LTY3LjctMzYuMi05My45cy01OC0zNC40LTkzLjktMzYuMi0xNDcuOS0yLjEtMTg0LjksMFM2NCw0My4zLDM3LjcsNjkuNXMtMzQuNCw1OC0zNi4yLDkzLjktMi4xLDE0Ny45LDAsMTg0LjksOS45LDY3LjcsMzYuMiw5My45LDU4LDM0LjQsOTMuOSwzNi4yLDE0Ny45LDIuMSwxODQuOSwwLDY3LjctOS45LDkzLjktMzYuMiwzNC40LTU4LDM2LjItOTMuOSwyLjEtMTQ3LjgsMC0xODQuOFpNMzk4LjgsMzg4YTc1LjYsNzUuNiwwLDAsMS00Mi42LDQyLjZjLTI5LjUsMTEuNy05OS41LDktMTMyLjEsOXMtMTAyLjcsMi42LTEzMi4xLTlBNzUuNiw3NS42LDAsMCwxLDQ5LjQsMzg4Yy0xMS43LTI5LjUtOS05OS41LTktMTMyLjFzLTIuNi0xMDIuNyw5LTEzMi4xQTc1LjYsNzUuNiwwLDAsMSw5Miw4MS4yYzI5LjUtMTEuNyw5OS41LTksMTMyLjEtOXMxMDIuNy0yLjYsMTMyLjEsOWE3NS42LDc1LjYsMCwwLDEsNDIuNiw0Mi42YzExLjcsMjkuNSw5LDk5LjUsOSwxMzIuMVM0MTAuNSwzNTguNiwzOTguOCwzODhaIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLjEgLTMxLjgpIiBmaWxsPSIjZmZmIi8+PC9zdmc+" %}
+
 {% block style %}
     <style>
-        html, body, * {
-            font-family: Arial, sans-serif;
+        html, body {
             background-color: #F9F9F9;
+        }
+
+        html, body, * {
+            font-family: 'Montserrat', Verdana, sans-serif;
             text-align: center;
         }
 
@@ -16,51 +23,68 @@
 
         .headline {
             background-color: #334155;
-            padding: 20px;
+            padding: 20px 20px 20px 20px;
             color: #F9F9F9;
             font-size: 1.5em;
         }
 
         .subject {
             text-align: center;
-            padding: 25px;
+            padding: 25px 25px 25px 25px;
             text-transform: uppercase;
         }
 
         .main-content {
             text-align: center;
-            padding: 20px;
+            padding: 20px 20px 20px 20px;
             color: #6c757d;
             font-size: 1em;
         }
 
-        .huge-title {
-            font-size: 2em;
+        .footer {
+            padding: 10px 15px 10px 15px;
+            font-size: 12px;
+            background-color: #334155;
+            color: white;
         }
 
-        .footer {
-            padding: 10px 5px 10px 5px;
-            font-family: Arial, sans-serif;
-            font-size: 12px;
+        .copyright {
+            padding: 5px 15px 5px 15px;
+            background-color: #334155;
+        }
+        .copyright a {
+            color: white;
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+        .social {
+            padding: 20px 0px 20px 0px;
+            background-color: #334155;
         }
 
         .social img {
-            padding: 10px 20px;
+            margin: 0px 20px 0px 20px;
+            color: white;
+        }
+
+        .social a {
+            text-decoration: none;
         }
     </style>
 {% endblock %}
 
 {% block content %}
 
-    <table cellspacing="0" cellpadding="0" width="100%">
+    <table border="{{ border }}" cellspacing="0" cellpadding="0" width="100%">
         <tr>
             <td>
-                <table cellspacing="0" cellpadding="0" width="600" align="center">
+                <table border="{{ border }}" cellspacing="0" cellpadding="0" width="600" align="center">
 
                     <tr>
                         <td class="headline">
                             {% block headline %}
-                                Made Blog
+                                MADE
                             {% endblock %}
                         </td>
                     </tr>
@@ -68,64 +92,61 @@
                     <tr>
                         <td class="subject">
                             {% block subject %}
-                                Subject of the email
+                                {{ email.subject|default('no subject specified') }}
                             {% endblock %}
                         </td>
                     </tr>
 
                     <tr>
                         <td colspan="2" class="main-content">
-                            <table cellspacing="0" cellpadding="0" width="100%">
-                                <tr>
-                                    <td><i>some nice image should be displayed here</i> <br></td>
-                                </tr>
-                                <tr>
-                                    <td class="huge-title">
-                                        You are almost subscribed!
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                        {% block content_mail %}
-                                            your registration code is {{ code }}.
-                                        {% endblock %}
-                                    </td>
-                                </tr>
-                            </table>
+                            {% block body %}
+                                No body specified.
+                            {% endblock %}
                         </td>
                     </tr>
 
                     <tr>
                         <td colspan="2" class="social">
-                            <table border="1" cellspacing="0" cellpadding="0" width="100%">
+                            <table border="{{ border }}" cellspacing="0" cellpadding="0" width="100%">
                                 <tr>
-                                    <td> </td>
                                     <td>
-                                        <a href="https://made.dev" target="_blank"><img height="20px" src="/globe-solid.png"></a>
-                                        <a href="https://twitter.com/made_dot_dev" target="_blank"><img height="20px" src="/twitter-brands.png"></a>
-                                        <a href="https://instagram.com/made_dot_dev" target="_blank"><img height="20px" src="/instagram-brands.png"></a>
+
+                                        {# ToDo: Add a hardlink to the below images #}
+                                        <a href="https://made.dev" target="_blank">
+                                            <img height="20px" alt="Website"
+                                                 src="data:image/svg+xml;base64,{{ icon_website_base64_svg }}">
+                                        </a>
+                                        <a href="https://twitter.com/made_dot_dev" target="_blank">
+                                            <img height="20px" alt="Twitter"
+                                                 src="data:image/svg+xml;base64,{{ icon_twitter_base64_svg }}">
+                                        </a>
+                                        <a href="https://instagram.com/made_dot_dev" target="_blank">
+                                            <img height="20px" alt="Instagram"
+                                                 src="data:image/svg+xml;base64,{{ icon_instagram_base64_svg }}">
+                                        </a>
                                     </td>
-                                    <td></td>
                                 </tr>
                             </table>
                         </td>
                     </tr>
 
                     <tr>
-                        <td colspan="2"
-                            class="footer">
-                            {% block footer %}
-                                Please do not respond as this address does not accept email and you won't get a response.
+                        <td colspan="2" class="footer">
+                            {% block footer_text_before %}
                             {% endblock %}
-
+                            {% block footer_text %}
+                                This is an automatically sent e-mail. <br>
+                                Please do not reply to this message, as the e-mail address is not set up to receive e-mails.
+                            {% endblock %}
+                            {% block footer_text_after %}
+                            {% endblock %}
                         </td>
                     </tr>
 
                     <tr>
                         <td colspan="2" class="copyright">
                             {% block copyright %}
-                                © 2020 Made
+                                <a href="https://made.dev">© 2020 Made</a>
                             {% endblock %}
                         </td>
                     </tr>

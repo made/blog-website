@@ -83,30 +83,37 @@ class MailService
             ->from($this->config->getFrom())
             ->to(...$this->config->getTo());
 
-        if ($this->config->hasTemplate()) {
-            $message->htmlTemplate($this->config->getTemplate());
-            if ($this->config->hasTemplateContext()) {
-                $message->context($this->config->getTemplateContext());
-            }
+        if ($this->config->hasHtmlTemplate()) {
+            $message->htmlTemplate($this->config->getHtmlTemplate());
+            $this->logger->debug('HTML template: ' . $this->config->getHtmlTemplate());
         }
 
+        if ($this->config->hasTextTemplate()) {
+            $message->textTemplate($this->config->getTextTemplate());
+            $this->logger->debug('Text template: ' . $this->config->getHtmlTemplate());
+        }
 
-        $this->logger->info('From: ' . $this->config->getFrom());
-        $this->logger->info('To: ' . implode(' ; ', $this->config->getTo()));
+        if ($this->config->hasTemplateContext()) {
+            $message->context($this->config->getTemplateContext());
+            $this->logger->debug('Template Context: ' . print_r($this->config->getTemplateContext(), true));
+        }
+
+        $this->logger->debug('From: ' . $this->config->getFrom());
+        $this->logger->debug('To: ' . implode(' ; ', $this->config->getTo()));
 
         if ($this->config->hasCc()) {
             $message->cc(...$this->config->getCc());
-            $this->logger->info('CC: ' . implode(', ', $this->config->getCc()));
+            $this->logger->debug('CC: ' . implode(', ', $this->config->getCc()));
         }
 
         if ($this->config->hasBcc()) {
             $message->bcc(...$this->config->getBcc());
-            $this->logger->info('BCC: ' . implode(', ', $this->config->getBcc()));
+            $this->logger->debug('BCC: ' . implode(', ', $this->config->getBcc()));
         }
 
         if ($this->config->hasAttachment()) {
             $message->attachFromPath($this->config->getAttachmentPath());
-            $this->logger->info('Attachment: ' . $this->config->getAttachmentPath());
+            $this->logger->debug('Attachment: ' . $this->config->getAttachmentPath());
         }
 
         return $message;

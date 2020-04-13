@@ -63,11 +63,16 @@ class MailConfiguration
     private $attachmentPath;
 
     /**
-     * Name of a twig template
+     * Name of a twig html template
      *
      * @var string|null
      */
-    private $template;
+    private $htmlTemplate;
+
+    /**
+     * @var string|null
+     */
+    private $textTemplate;
 
     /**
      * Values that should be passed to the template
@@ -111,9 +116,17 @@ class MailConfiguration
     /**
      * @return bool
      */
-    public function hasTemplate(): bool
+    public function hasHtmlTemplate(): bool
     {
-        return !empty($this->template);
+        return !empty($this->htmlTemplate);
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasTextTemplate(): bool
+    {
+        return !empty($this->textTemplate);
     }
 
     /**
@@ -253,18 +266,36 @@ class MailConfiguration
     /**
      * @return string|null
      */
-    public function getTemplate(): ?string
+    public function getHtmlTemplate(): ?string
     {
-        return $this->template;
+        return $this->htmlTemplate;
     }
 
     /**
-     * @param string|null $template
+     * @param string|null $htmlTemplate
      * @return MailConfiguration
      */
-    public function setTemplate(?string $template): MailConfiguration
+    public function setHtmlTemplate(?string $htmlTemplate): MailConfiguration
     {
-        $this->template = $template;
+        $this->htmlTemplate = $htmlTemplate;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTextTemplate(): ?string
+    {
+        return $this->textTemplate;
+    }
+
+    /**
+     * @param string|null $textTemplate
+     * @return MailConfiguration
+     */
+    public function setTextTemplate(?string $textTemplate): MailConfiguration
+    {
+        $this->textTemplate = $textTemplate;
         return $this;
     }
 

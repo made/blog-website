@@ -1,0 +1,32 @@
+{% extends '@mailer/content_wrapper.html.twig' %}
+
+{% set smile_icon_base64_svg = "PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OTYgNDk2Ij48cGF0aCBkPSJNMjQ4LDhDMTExLDgsMCwxMTksMCwyNTZTMTExLDUwNCwyNDgsNTA0LDQ5NiwzOTMsNDk2LDI1NiwzODUsOCwyNDgsOFptMCw0NDhDMTM3LjcsNDU2LDQ4LDM2Ni4zLDQ4LDI1NlMxMzcuNyw1NiwyNDgsNTZzMjAwLDg5LjcsMjAwLDIwMFMzNTguMyw0NTYsMjQ4LDQ1NlptODQtMTQzLjRhMTA5LjIsMTA5LjIsMCwwLDEtMTY4LDAsMjQsMjQsMCwwLDAtMzYuOSwzMC43LDE1Ny40LDE1Ny40LDAsMCwwLDI0MS44LDBBMjQsMjQsMCwxLDAsMzMyLDMxMi42Wk0xMzYuNSwyMTFjNy43LTEzLjcsMTkuMi0yMS42LDMxLjUtMjEuNnMyMy44LDcuOSwzMS41LDIxLjZsOS41LDE3YTcuOSw3LjksMCwwLDAsOS4zLDMuNyw4LDgsMCwwLDAsNS43LTguM2MtMy4zLTQyLjEtMzIuMi03MS40LTU2LTcxLjRzLTUyLjcsMjkuMy01Niw3MS40YTguMSw4LjEsMCwwLDAsNS43LDguM0E4LjIsOC4yLDAsMCwwLDEyNywyMjhaTTMyOCwxNTJjLTIzLjgsMC01Mi43LDI5LjMtNTYsNzEuNGE4LDgsMCwwLDAsMTUsNC42bDkuNS0xN2M3LjctMTMuNywxOS4yLTIxLjYsMzEuNS0yMS42czIzLjgsNy45LDMxLjUsMjEuNmw5LjUsMTdhNy45LDcuOSwwLDAsMCw5LjMsMy43LDgsOCwwLDAsMCw1LjctOC4zQzM4MC43LDE4MS4zLDM1MS44LDE1MiwzMjgsMTUyWiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAtOCkiIGZpbGw9IiM1MTY1ODUiLz48L3N2Zz4=" %}
+
+{% block headline %}
+    MADE BLOG
+{% endblock %}
+
+{% block body %}
+    <table border="{{ border }}" cellspacing="0" cellpadding="0" width="100%">
+
+        <tr>
+            <td>
+                <img height="90px" alt="Smiley" src="data:image/svg+xml;base64,{{ smile_icon_base64_svg }}">
+            </td>
+        </tr>
+
+        <tr>
+            <td style="padding: 15px 0px 15px 0px; font-size: 24px;">
+                You are almost subscribed!
+            </td>
+        </tr>
+
+        <tr>
+            <td style="padding: 10px 0px 10px 0px">
+                Your registration code is
+                <div style="font-weight: bold; font-size: 32px;">{{ code }}</div>
+            </td>
+        </tr>
+
+    </table>
+{% endblock %}
